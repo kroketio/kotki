@@ -165,6 +165,8 @@ MemoryBundle getMemoryBundleFromConfig(marian::Ptr<marian::Options> options) {
 AlignedMemory getSsplitPrefixFileMemoryFromConfig(marian::Ptr<marian::Options> options) {
   std::string fpath = options->get<std::string>("ssplit-prefix-file", "");
   if (!fpath.empty()) {
+    // @TODO: maybe rewrite to fetch from RAM instead, as we already have the data in nb_prefix.h
+    //        this would also get rid of writing nb_prefixes to disk.
     return loadFileToMemory(fpath, 64);
   }
   // Return empty AlignedMemory

@@ -59,22 +59,17 @@ class TranslationModel {
   /// ShortlistGenerator, Vocabs and SentenceSplitter.
   TranslationModel(const Config& options, MemoryBundle&& memory, size_t replicas = 1);
 
-  TranslationModel(const Config& options, size_t replicas = 1)
+  explicit TranslationModel(const Config& options, size_t replicas = 1)
       : TranslationModel(options, getMemoryBundleFromConfig(options), replicas) {}
 
   /// Make a Request to be translated by this TranslationModel instance.
-  /// @param [in] requestId: Unique identifier associated with this request, available from Service.
   /// @param [in] source: Source text to be translated. Ownership is accepted and eventually returned to the client in
   /// Response corresponding to the Request created here.
   /// @param [in] callback: Callback (from client) to be issued upon completion of translation of all sentences in the
   /// created Request.
   /// @param [in] responseOptions: Configuration used to prepare the Response corresponding to the created request.
   //  @returns Request created from the query parameters wrapped within a shared-pointer.
-  Ptr<Request> makeRequest(size_t requestId, std::string&& source, CallbackType callback,
-                           const ResponseOptions& responseOptions, std::optional<TranslationCache>& cache);
-
-  Ptr<Request> makePivotRequest(size_t requestId, AnnotatedText&& previousTarget, CallbackType callback,
-                                const ResponseOptions& responseOptions, std::optional<TranslationCache>& cache);
+  Ptr<Request> makeRequest(std::string&& source, std::optional<TranslationCache>& cache);
 
   /// Relays a request to the batching-pool specific to this translation model.
   /// @param [in] request: Request constructed through makeRequest

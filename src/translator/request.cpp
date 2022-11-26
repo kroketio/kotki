@@ -22,10 +22,9 @@ size_t hashForCache(const TranslationModel &model, const marian::Words &words) {
 }
 
 // -----------------------------------------------------------------
-Request::Request(size_t Id, const TranslationModel &model, Segments &&segments, ResponseBuilder &&responseBuilder,
+Request::Request(const TranslationModel &model, Segments &&segments, ResponseBuilder &&responseBuilder,
                  std::optional<TranslationCache> &cache)
-    : Id_(Id),
-      model_(model),
+    : model_(model),
       segments_(std::move(segments)),
       responseBuilder_(std::move(responseBuilder)),
       cache_(cache) {
@@ -37,7 +36,7 @@ Request::Request(size_t Id, const TranslationModel &model, Segments &&segments, 
   // present. However, in this case we want an empty valid response. There's no need to do any additional processing
   // here.
   if (segments_.size() == 0) {
-    responseBuilder_(std::move(histories_));
+    response = responseBuilder_.build(std::move(histories_));
   } else {
     counter_ = segments_.size();
     histories_.resize(segments_.size());
@@ -57,7 +56,7 @@ Request::Request(size_t Id, const TranslationModel &model, Segments &&segments, 
       // 2. Also, if cache somehow manages to decrease all counter prefilling histories, then we'd have to trigger
       // ResponseBuilder as well. No segments go into batching and therefore no processHistory triggers.
       if (counter_.load() == 0) {
-        responseBuilder_(std::move(histories_));
+        response = responseBuilder_.build(std::move(histories_));
       }
     }
   }
@@ -84,13 +83,8 @@ void Request::processHistory(size_t index, Ptr<History> history) {
   // In case this is last request in, completeRequest is called, which sets the
   // value of the promise.
   if (--counter_ == 0) {
-    responseBuilder_(std::move(histories_));
+    response = responseBuilder_.build(std::move(histories_));
   }
-}
-
-bool Request::operator<(const Request &b) const {
-  // Among Requests, only sequence id is used for obtaining priority.
-  return Id_ < b.Id_;
 }
 
 // ------------------------------------------------------------------

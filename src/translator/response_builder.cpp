@@ -40,29 +40,16 @@ void ResponseBuilder::buildTranslatedText(Histories &histories, Response &respon
     std::vector<string_view> targetSentenceMappings;
     vocabs_.target()->decodeWithByteRanges(words, decoded, targetSentenceMappings, /*ignoreEOS=*/false);
 
-    switch (responseOptions_.concatStrategy) {
-      case ConcatStrategy::FAITHFUL: {
-        // For each sentence, prepend the filler text between the corresponding
-        // source-sentence and the source-sentence before.
-        string_view pre = response.source.gap(sentenceIdx);
-        response.target.appendSentence(pre, targetSentenceMappings.begin(), targetSentenceMappings.end());
+    // For each sentence, prepend the filler text between the corresponding
+    // source-sentence and the source-sentence before.
+    string_view pre = response.source.gap(sentenceIdx);
+    response.target.appendSentence(pre, targetSentenceMappings.begin(), targetSentenceMappings.end());
 
-        // If this is the last history to be decoded and translated-text
-        // constructed, append the text till the end, which could be spaces or
-        // empty.
-        if (sentenceIdx + 1 == histories.size()) {
-          response.target.appendEndingWhitespace(response.source.gap(sentenceIdx + 1));
-        }
-        break;
-      }
-      case ConcatStrategy::SPACE: {
-        string_view delimiter = (sentenceIdx == 0) ? "" : " ";
-        response.target.appendSentence(delimiter, targetSentenceMappings.begin(), targetSentenceMappings.end());
-        break;
-      }
-
-      default:
-        ABORT("Unknown concat-strategy");
+    // If this is the last history to be decoded and translated-text
+    // constructed, append the text till the end, which could be spaces or
+    // empty.
+    if (sentenceIdx + 1 == histories.size()) {
+      response.target.appendEndingWhitespace(response.source.gap(sentenceIdx + 1));
     }
   }
 }

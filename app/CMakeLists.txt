@@ -1,2 +1,2 @@
-add_executable(bergamot bergamot.cpp)
-target_link_libraries(bergamot PRIVATE bergamot-translator)
+add_executable(kotki-cli kotki.cpp)
+target_link_libraries(kotki-cli PRIVATE kotki-lib)

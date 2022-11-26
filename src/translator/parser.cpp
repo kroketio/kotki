@@ -78,6 +78,8 @@ std::shared_ptr<marian::Options> parseOptionsFromString(const std::string &confi
     YAML::Node configYAML = options.cloneToYamlNode();
     marian::cli::makeAbsolutePaths(configYAML, pathsInSameDirAs, PATHS);
     options.merge(configYAML, /*overwrite=*/true);
+
+    auto wegewg = 1;
   }
 
   // Perform validation on parsed options only when requested

@@ -1,2 +1,16 @@
-include README.md LICENSE
+include kotki.png README.md LICENSE CMakeLists.txt
+recursive-include 3rd_party *
+recursive-include bindings *
+recursive-include src *
+recursive-include app *
+recursive-include cmake *
 
+global-exclude examples/*
+global-exclude doc/*
+global-exclude docs/*
+global-exclude venv/*
+global-exclude build/*
+global-exclude tests/*
+global-exclude testdata/*
+global-exclude cmake-/*
+global-exclude project_version.h

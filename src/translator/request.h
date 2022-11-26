@@ -44,7 +44,6 @@ class Request {
   /// the Response upon completion of the Request.
   ///
   ///
-  /// @param [in] Id: Identifier assigned to Request by Service.
   /// @param [in] model: TranslationModel for identifying a unique translation unit key (model, words in a sentence) for
   /// cache.
   /// @param [in] segments: Each segment is a unit to be translated.
@@ -53,8 +52,10 @@ class Request {
   /// Request.
   /// @param [in] cache: Cache supplied externally to attempt to fetch translations or store them after completion for
   /// reuse later.
-  Request(size_t Id, const TranslationModel &model, Segments &&segments, ResponseBuilder &&responseBuilder,
+  Request(const TranslationModel &model, Segments &&segments, ResponseBuilder &&responseBuilder,
           std::optional<TranslationCache> &cache);
+
+  Response response;
 
   /// Obtain the count of tokens in the segment correponding to index. Used to
   /// insert sentence from multiple requests into the corresponding size bucket.
@@ -77,6 +78,10 @@ class Request {
 
   bool cacheHitPrefilled(size_t index) const { return histories_[index] != nullptr; }
 
+  /// Constructing Response requires the vocabs_ used to generate Request.
+  /// std::vector<Ptr<Vocab const>> *vocabs_;
+  ResponseBuilder responseBuilder_;
+
  private:
   size_t Id_;
 
@@ -95,10 +100,6 @@ class Request {
   /// histories_ is a buffer which eventually stores the translations of each
   /// segment in the corresponding index.
   std::vector<Ptr<History>> histories_;
-
-  /// Constructing Response requires the vocabs_ used to generate Request.
-  /// std::vector<Ptr<Vocab const>> *vocabs_;
-  ResponseBuilder responseBuilder_;
 
   /// Cache used to hold unit translations. If nullopt, means no-caching.
   std::optional<TranslationCache> &cache_;

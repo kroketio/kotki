@@ -3,6 +3,8 @@ import os
 import re
 import subprocess
 import sys
+import multiprocessing
+from shutil import rmtree
 
 from setuptools import Command, Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
@@ -49,11 +51,12 @@ class CMakeBuild(build_ext):
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
             f"-DCOMPILE_PYTHON=ON",
+            f"-DRECONSTRUCT_GIT=ON",
             f"-DSSPLIT_USE_INTERNAL_PCRE2=ON",
             f"-DBUILD_ARCH={build_arch}",
         ]
 
-        build_args = ["-t", "_bergamot"]
+        build_args = ["-t", "kotki"]
         # Adding CMake arguments set as environment variable
         # (needed e.g. to build for ARM OSx on conda-forge)
         if "CMAKE_ARGS" in os.environ:
@@ -113,11 +116,7 @@ class CMakeBuild(build_ext):
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
         # across all generators.
         if "CMAKE_BUILD_PARALLEL_LEVEL" not in os.environ:
-            # self.parallel is a Python 3 only way to set parallel jobs by hand
-            # using -j in the build_ext call, not supported by pip or PyPA-build.
-            if hasattr(self, "parallel") and self.parallel:
-                # CMake 3.12+ only.
-                build_args += [f"-j{self.parallel}"]
+            build_args += [f"-j{multiprocessing.cpu_count()}"]
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
@@ -141,7 +140,7 @@ with io.open(os.path.join(here, "bindings/python/README.md"), encoding="utf-8") 
     long_description = "\n" + f.read()
 
 version = None
-with open(os.path.join(here, "BERGAMOT_VERSION")) as f:
+with open(os.path.join(here, "src", "BERGAMOT_VERSION")) as f:
     version = f.read().strip()
     suffix = os.environ.get("PYTHON_LOCAL_VERSION_IDENTIFIER", None)
     if suffix:
@@ -193,28 +192,23 @@ class build_py(_build_py):
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
-    name="bergamot",
+    name="kotki",
     version=version,
-    author="Jerin Philip",
-    author_email="jerinphilip@live.in",
-    url="https://github.com/browsermt/bergamot-translator/",
-    description="Translate text-content locally in your machine across langauges.",
+    author="Kroket Ltd.",
+    author_email="code@kroket.io",
+    url="https://github.com/kroketio/kotki/",
+    description="Translate text locally on your machine.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    ext_modules=[CMakeExtension("bergamot/_bergamot")],
+    ext_modules=[CMakeExtension("kotki/kotki")],
     cmdclass={"build_py": build_py, "build_ext": CMakeBuild},
     zip_safe=False,
     extras_require={"test": ["pytest>=6.0"]},
     license_files=("LICENSE",),
     python_requires=">=3.6",
-    packages=["bergamot"],
-    package_dir={"bergamot": "bindings/python"},
+    packages=["kotki"],
+    package_dir={"kotki": "bindings/python"},
     install_requires=["requests", "pyyaml>=5.1", "appdirs"],
-    entry_points={
-        "console_scripts": [
-            "bergamot = bergamot.__main__:main",
-        ],
-    },
     # Classifiers help users find your project by categorizing it.
     #
     # For a list of valid classifiers, see https://pypi.org/classifiers/
@@ -241,8 +235,7 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     project_urls={
-        "Bug Reports": "https://github.com/browsermt/bergamot-translator/issues",
-        "Source": "https://github.com/browsermt/bergamot-translator/",
-        "Documentation": "https://browser.mt/docs/main/python.html",
+        "Bug Reports": "https://github.com/kroketio/kotki/issues",
+        "Source": "https://github.com/kroketio/kotki/"
     },
 )

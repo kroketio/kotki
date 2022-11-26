@@ -1,87 +1,130 @@
-# Bergamot Translator
+![https://i.imgur.com/2alDAhA.png](https://i.imgur.com/2alDAhA.png)
 
-[![CircleCI badge](https://img.shields.io/circleci/project/github/browsermt/bergamot-translator/main.svg?label=CircleCI)](https://circleci.com/gh/browsermt/bergamot-translator/)
+# kotki
 
-Bergamot translator provides a unified API for ([Marian NMT](https://marian-nmt.github.io/) framework based) neural machine translation functionality in accordance with the [Bergamot](https://browser.mt/) project that focuses on improving client-side machine translation in a web browser.
+[![License: MPL v2](https://img.shields.io/badge/License-MPL%20v2-blue.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
 
-## Build Instructions
 
-### Build Natively
-Create a folder where you want to build all the artifacts (`build-native` in this case) and compile
+Simple and fast language translations without using the cloud.
 
-```bash
-mkdir build-native
-cd build-native
-cmake ../
-make -j2
+Languages supported: whatever the official Mozilla extension ['Firefox Translations'](https://addons.mozilla.org/en-US/firefox/addon/firefox-translations/)  supports - as we borrow their translation models. 
+
+Built on top of [Bergamot](https://browser.mt/) and 
+[Marian](https://github.com/kroketio/marian-dev/) - efficient Neural Machine Translation framework written 
+in pure C++ with minimal dependencies. 
+
+## why
+
+Other translation libraries are bloated, difficult to compile / use, non-performant, etc.
+
+Kotki is a modified [Bergamot-Translator](https://github.com/browsermt/bergamot-translator/) aimed 
+at ease-of-use for developers who want to translate some text in their C++ or Python 
+applications without too much headache. 
+
+The translation models are provided on the [kotki/releases](https://github.com/kroketio/kotki/releases) page.
+
+## Examples
+
+C++ example in `app/kotki.cpp`. Python example below. The API for both is the same.
+
+```python3
+import kotki
+
+kotki.loadRegistry("/home/user/example/registry.json")
+kotki.translate("Whenever I am at the office, I like to drink coffee.", "ende")
+'Wann immer ich im büro bin, trinke ich gerne kaffee.'
+
+kotki.translate("Румънците получиха дълго чакани новини: пенсиите и минималната заплата ще бъдат увеличени от 2023 г.", "bgen")
+'Romanians have received long-awaited news: pensions and minimum wages will be increased from 2023'
+
+kotki.translate("I am from the city of Den Haag.", "nlen")
+'I am from the city of The Hague.'
 ```
 
-### Build WASM
-#### Prerequisite
+As you can see, only 2 functions. Very straight-forward. For use in C++ you'd link 
+against `kotki-lib` using CMake. For use in Python you simply `pip install` it.
 
-Building on wasm requires Emscripten toolchain. It can be downloaded and installed using following instructions:
+## Requirements
 
-* Get the latest sdk: `git clone https://github.com/emscripten-core/emsdk.git`
-* Enter the cloned directory: `cd emsdk`
-* Install the sdk: `./emsdk install 3.1.8`
-* Activate the sdk: `./emsdk activate 3.1.8`
-* Activate path variables: `source ./emsdk_env.sh`
-
-#### <a name="Compile"></a> Compile
-
-To build a version that translates with higher speeds on Firefox Nightly browser, follow these instructions:
-
-   1. Create a folder where you want to build all the artifacts (`build-wasm` in this case) and compile
-       ```bash
-       mkdir build-wasm
-       cd build-wasm
-       emcmake cmake -DCOMPILE_WASM=on ../
-       emmake make -j2
-       ```
-
-       The wasm artifacts (.js and .wasm files) will be available in the build directory ("build-wasm" in this case).
-
-   2. Enable SIMD Wormhole via Wasm instantiation API in generated artifacts
-       ```bash
-       bash ../wasm/patch-artifacts-enable-wormhole.sh
-       ```
-
-   3. Patch generated artifacts to import GEMM library from a separate wasm module
-       ```bash
-       bash ../wasm/patch-artifacts-import-gemm-module.sh
-       ```
-
-To build a version that runs on all browsers (including Firefox Nightly) but translates slowly, follow these instructions:
-
-  1. Create a folder where you want to build all the artifacts (`build-wasm` in this case) and compile
-      ```bash
-      mkdir build-wasm
-      cd build-wasm
-      emcmake cmake -DCOMPILE_WASM=on -DWORMHOLE=off ../
-      emmake make -j2
-      ```
-
-  2. Patch generated artifacts to import GEMM library from a separate wasm module
-       ```bash
-       bash ../wasm/patch-artifacts-import-gemm-module.sh
-       ```
-
-#### Recompiling
-As long as you don't update any submodule, just follow [Compile](#Compile) steps.\
-If you update a submodule, execute following command in repository root folder before executing
-[Compile](#Compile) steps.
 ```bash
-git submodule update --init --recursive
+apt install -y ccache rapidjson cmake libpcre++-dev libpcre2-dev python3-dev
 ```
 
+Get MKL installed. For example, this does the installation on Ubuntu 21.
 
-## How to use
+```bash
+wget -qO- 'https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB' | sudo apt-key add -
+sudo sh -c 'echo deb https://apt.repos.intel.com/mkl all main > /etc/apt/sources.list.d/intel-mkl.list'
+sudo apt update
+sudo apt install -y intel-mkl-64bit-2020.4-912
+```
 
-### Using Native version
+In case you cannot find the correct version to install, you may use the package
+manager to search for the correct package name: `apt search intel-mkl-64bit-2020`
 
-The builds generate library that can be integrated to any project. All the public header files are specified in `src` folder.\
-A short example of how to use the APIs is provided in `app/main.cpp` file.
+### Building the Python module
 
-### Using WASM version
+Note: the above requirements are not a suggestion, you need them. If you are all set, install using `pip`:
 
-Please follow the `README` inside the `wasm` folder of this repository that demonstrates how to use the translator in JavaScript.
+```bash
+pip install kotki
+```
+
+at which point you can do `import kotki` inside your Python application.
+
+## Models
+
+The translation models are 'borrowed' from the
+Mozilla [Firefox Translations](https://addons.mozilla.org/en-US/firefox/addon/firefox-translations/)
+extension. **You need to manually download these models.** They are conveniently packaged into a single
+archive that can be downloaded at [kotki/releases](https://github.com/kroketio/kotki/releases).
+
+`registry.json` is included in this archive - which is needed for the `loadRegistry()` call.
+
+## Performance / footprint
+
+Translations are **fast** - (probably) faster than other Python packages that do 
+language translation. Translating a simple sentence is
+usually **under** `10ms` (except the first time, due to model loading). Loading a
+single translation model seems to take up around `40MB` in RAM.
+
+Translation models are loaded on-demand. This means that model
+loading does not happen during `loadRegistry()` but during the first use
+of `translate()` - which typically takes (only) `100ms` (per model). So if you have
+a project that uses both `translate('foo', 'enfr')` and `translate('foo', 'fren')` - you'll be using 2
+models (and consequently `80MB` worth of RAM during the duration of your program).
+
+Note that translations are done synchronously (and thus are 'blocking'). If you need 
+an async/callback style approach, look at the [Bergamot-Translator](https://github.com/browsermt/bergamot-translator/).
+
+## Acknowledgements
+
+This project was made possible through the combined effort of all researchers
+and [partners](https://browser.mt/partners/) in the Bergamot project (Jerin Philip, et al). The
+[translation models](https://github.com/mozilla/firefox-translations/blob/main/extension/model/modelRegistry.js) are
+prepared as part of the Mozilla project. The translation engine used is
+[bergamot-translator](https://github.com/browsermt/bergamot-translator) which
+is based on [marian](https://github.com/browsermt/marian-dev).
+
+## Bergamot-Translator
+
+Kotki differs from Bergamot-Translator. The changes are specified below:
+
+- Removed async/blocking worker pools
+- Removed async/callback style translations
+- Removed code related to parsing of HTML
+- Work from a single JSON config file (`registry.json`)
+- Dynamically generate marian configs 'on-the-fly'
+- Simplified the example C++ CLI program (`app/kotki.cpp`).
+- Simplified Python bindings (expose only 3 functions)
+- Simplified the build system (cleaned up various CMakeLists.txt)
+- Introduced automatic use of `ccache` for compilations
+- Removed WASM support
+- Removed unit tests
+- Removed CI/CD definitions
+- Introduced new dependency: rapidjson
+- Doxygen, and other documentation removed
+
+## License
+
+MPL 2.0
