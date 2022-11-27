@@ -46,19 +46,3 @@ Done.
 ## `generate_ssplit_bundle.py`
 
 internal tool to generate `nb_prefix.h`
-
-
-# Releasing pypi
-
-When releasing for pypi, ensure shallow builds throughout to save on package size.
-
-```bash
-git clone https://github.com/kroketio/kotki/ --depth 1 --recursive --shallow-submodules
-```
-
-Build package and update
-
-```bash
-python3 setup.py sdist
-twine upload dist/*
-```

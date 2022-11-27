@@ -13,7 +13,13 @@ import kotki
 kotki.loadRegistry("/home/user/example/registry.json")
 
 kotki.translate("Whenever I am at the office, I like to drink coffee", "ende")
-# 'Wann immer ich im Büro bin, trinke ich gerne Kaffee'
+'Wann immer ich im Büro bin, trinke ich gerne Kaffee'
+
+kotki.translate("Румънците получиха дълго чакани новини: пенсиите и минималната заплата ще бъдат увеличени от 2023 г.", "bgen")
+'Romanians have received long-awaited news: pensions and minimum wages will be increased from 2023'
+
+kotki.translate("I am from the city of Den Haag.", "nlen")
+'I am from the city of The Hague.'
 ```
 
 ## Requirements
@@ -40,6 +46,8 @@ manager to search for the correct package name: `apt search intel-mkl-64bit-2020
 pip install kotki
 ```
 
+at which point you can do `import kotki` inside your Python application.
+
 ## API
 
 The API is straight-forward and contains only 3 functions:
@@ -62,13 +70,16 @@ archive that can be downloaded at [github.com/kroketio/kotki/releases](https://g
 Translations are **fast** - (probably) faster than other Python packages that do
 language translation. Translating a simple sentence is
 usually **under** `10ms` (except the first time, due to model loading). Loading a
-single translation model seems to take up around `30MB` in RAM.
+single translation model seems to take up around `40MB` in RAM.
 
 Translation models are loaded on-demand. This means that model
 loading does not happen during `loadRegistry()` but during the first use
 of `translate()` - which typically takes (only) `100ms` (per model). So if you have
 a project that uses both `translate('foo', 'enfr')` and `translate('foo', 'fren')` - you'll be using 2
-models (and consequently `60MB` worth of RAM during the duration of your program).
+models (and consequently `80MB` worth of RAM during the duration of your program).
+
+Note that translations are done synchronously (and thus are 'blocking'). If you need
+an async/callback style approach, look at the [Bergamot-Translator](https://github.com/browsermt/bergamot-translator/).
 
 ## Acknowledgements
 
