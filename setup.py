@@ -65,13 +65,6 @@ class CMakeBuild(build_ext):
         # In this example, we pass in the version to C++. You might not need to.
         cmake_args += [f"-DEXAMPLE_VERSION_INFO={self.distribution.get_version()}"]
 
-        use_ccache = os.environ.get("USE_CCACHE", "0") == "1"
-        if use_ccache:
-            cmake_args += [
-                f"-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
-                f"-DCMAKE_C_COMPILER_LAUNCHER=ccache",
-            ]
-
         if self.compiler.compiler_type != "msvc":
             # Using Ninja-build since it a) is available as a wheel and b)
             # multithreads automatically. MSVC would require all variables be
@@ -116,7 +109,10 @@ class CMakeBuild(build_ext):
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
         # across all generators.
         if "CMAKE_BUILD_PARALLEL_LEVEL" not in os.environ:
-            build_args += [f"-j{multiprocessing.cpu_count()}"]
+            cpu_count = multiprocessing.cpu_count()
+            if cpu_count > 1:  # cut some slack :-P
+                cpu_count -= 1
+            build_args += [f"-j{cpu_count}"]
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)

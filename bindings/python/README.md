@@ -27,7 +27,7 @@ kotki.translate("I am from the city of Den Haag.", "nlen")
 Lets grab some requirements before we do `pip install`.
 
 ```bash
-apt install -y ccache rapidjson cmake libpcre++-dev libpcre2-dev python3-dev
+apt install -y ccache rapidjson-dev cmake libpcre++-dev libpcre2-dev python3-dev
 ```
 
 Get MKL installed. For example, this does the installation on Ubuntu 21.

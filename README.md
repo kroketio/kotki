@@ -47,7 +47,7 @@ against `kotki-lib` using CMake. For use in Python you simply `pip install` it.
 ## Requirements
 
 ```bash
-apt install -y ccache rapidjson cmake libpcre++-dev libpcre2-dev python3-dev
+apt install -y ccache rapidjson-dev cmake libpcre++-dev libpcre2-dev python3-dev
 ```
 
 Get MKL installed. For example, this does the installation on Ubuntu 21.
@@ -67,8 +67,14 @@ manager to search for the correct package name: `apt search intel-mkl-64bit-2020
 Note: the above requirements are not a suggestion, you need them. If you are all set, install using `pip`:
 
 ```bash
-pip install kotki
+pip install kotki -v
 ```
+
+##### Compile times
+
+- AMD Ryzen 7 4700U - 4c/8t 32GB RAM - 2min
+- i7-1165G7 - 4c/8t 32GB RAM - 2min
+- VPS at OVH - 4c 8GB RAM - 8min
 
 at which point you can do `import kotki` inside your Python application.
 
