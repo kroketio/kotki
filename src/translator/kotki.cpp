@@ -33,8 +33,8 @@ void KotkiTranslationModel::load() {
   config->set("word-penalty", "0");
   config->set("max-length-break", "128");
   config->set("mini-batch-words", "1024");
-  config->set("workspace", "128");
-  config->set("max-length-factor", "2.0");
+  config->set("workspace", "2000");
+  config->set("max-length-factor", "2.5");
   config->set("cpu-threads", "0");
   config->set("quiet", "true");
   config->set("quiet-translation", "true");
@@ -65,6 +65,9 @@ string KotkiTranslationModel::findNBPrefixFile() {
   auto fileName = "nonbreaking_prefix." + this->langFrom;
   auto filePath = this->kotki_->kotkiCfgNbDir + fileName;
   if(fs::exists(filePath)) { return filePath; }
+  if(this->langFrom == "bg") {
+    return this->kotki_->kotkiCfgNbDir + "nonbreaking_prefix.ru";  // close 'nuff
+  }
   return this->kotki_->kotkiCfgNbDir + "nonbreaking_prefix." + nb_prefix_default;
 }
 

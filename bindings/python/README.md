@@ -43,10 +43,14 @@ In case you cannot find the correct version to install, you may use the package
 manager to search for the correct package name: `apt search intel-mkl-64bit-2020`
 
 ```bash
-pip install kotki
+pip install kotki -v
 ```
 
-at which point you can do `import kotki` inside your Python application.
+##### Compile times
+
+- AMD Ryzen 7 4700U - 4c/8t 32GB RAM - 2min
+- i7-1165G7 - 4c/8t 32GB RAM - 3min
+- VPS at OVH - 4c 8GB RAM - 8min
 
 ## API
 
