@@ -73,7 +73,7 @@ pip install kotki -v
 ##### Compile times
 
 - AMD Ryzen 7 4700U - 4c/8t 32GB RAM - 2min
-- i7-1165G7 - 4c/8t 32GB RAM - 2min
+- i7-1165G7 - 4c/8t 32GB RAM - 3min
 - VPS at OVH - 4c 8GB RAM - 8min
 
 at which point you can do `import kotki` inside your Python application.
