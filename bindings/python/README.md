@@ -18,8 +18,8 @@ kotki.translate("Whenever I am at the office, I like to drink coffee", "ende")
 kotki.translate("Румънците получиха дълго чакани новини: пенсиите и минималната заплата ще бъдат увеличени от 2023 г.", "bgen")
 'Romanians have received long-awaited news: pensions and minimum wages will be increased from 2023'
 
-kotki.translate("I am from the city of Den Haag.", "nlen")
-'I am from the city of The Hague.'
+kotki.translate("jij bent geboren in de stad Den Haag.", "nlen")
+'You were born in The Hague.'
 ```
 
 ## Requirements
@@ -27,7 +27,7 @@ kotki.translate("I am from the city of Den Haag.", "nlen")
 Lets grab some requirements before we do `pip install`.
 
 ```bash
-apt install -y ccache rapidjson-dev cmake libpcre++-dev libpcre2-dev python3-dev
+apt install -y ccache rapidjson-dev cmake libpcre++-dev libpcre2-dev python3-dev pybind11-dev
 ```
 
 Get MKL installed. For example, this does the installation on Ubuntu 21.
