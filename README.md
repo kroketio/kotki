@@ -7,30 +7,20 @@
 
 Simple and fast language translations without using the cloud.
 
-Languages supported: whatever the official Mozilla extension ['Firefox Translations'](https://addons.mozilla.org/en-US/firefox/addon/firefox-translations/)  supports - as we borrow their translation models. 
+Translation models borrowed from the Mozilla extension ['Firefox Translations'](https://addons.mozilla.org/en-US/firefox/addon/firefox-translations/). 
 
 Built on top of [Bergamot](https://browser.mt/) and 
 [Marian](https://github.com/kroketio/marian-dev/) - efficient Neural Machine Translation framework written 
 in pure C++ with minimal dependencies. 
 
-## why
+## Usage
 
-Other translation libraries are bloated, difficult to compile / use, non-performant, etc.
-
-Kotki is a modified [Bergamot-Translator](https://github.com/browsermt/bergamot-translator/) aimed 
-at ease-of-use for developers who want to translate some text in their C++ or Python 
-applications without too much headache. 
-
-The translation models are provided on the [kotki/releases](https://github.com/kroketio/kotki/releases) page.
-
-## Examples
-
-C++ example in `app/kotki.cpp`. Python example below. The API for both is the same.
+Kotki is a C++ library but Python bindings are available:
 
 ```python3
 import kotki
-
 kotki.loadRegistry("/home/user/example/registry.json")
+
 kotki.translate("Whenever I am at the office, I like to drink coffee.", "ende")
 'Wann immer ich im büro bin, trinke ich gerne kaffee.'
 
@@ -41,8 +31,18 @@ kotki.translate("jij bent geboren in de stad Den Haag.", "nlen")
 'You were born in The Hague.'
 ```
 
-As you can see, only 2 functions. Very straight-forward. For use in C++ you'd link 
-against `kotki-lib` using CMake. For use in Python you simply `pip install` it.
+For use in a C++ project you would link against `kotki-lib` (CMake). See `app/kotki.cpp` and `app/CMakeLists.txt` 
+for reference. Note that Kotki's API is the same for both Python and C++.
+
+## why
+
+Other translation libraries are bloated, difficult to compile / use, non-performant, etc.
+
+Kotki is a modified [Bergamot-Translator](https://github.com/browsermt/bergamot-translator/) aimed 
+at ease-of-use for developers who want to translate some text in their C++ or Python 
+applications without too much headache. 
+
+The translation models are provided on the [kotki/releases](https://github.com/kroketio/kotki/releases) page.
 
 ## Requirements
 
@@ -72,15 +72,16 @@ pip install kotki -v
 
 ##### Compile times
 
-- AMD Ryzen 7 4700U - 4c/8t 32GB RAM - 2min
+- AMD Ryzen 9 5900x - 12c/24t 64GB RAM - 1.5min
+- AMD Ryzen 7 4700U - 4c/8t 32GB RAM - 3min
 - i7-1165G7 - 4c/8t 32GB RAM - 3min
-- VPS at OVH - 4c 8GB RAM - 8min
+- random VPS at OVH - 4c 8GB RAM - 8min
 
 at which point you can do `import kotki` inside your Python application.
 
 ## Models
 
-The translation models are 'borrowed' from the
+The translation models are borrowed from the
 Mozilla [Firefox Translations](https://addons.mozilla.org/en-US/firefox/addon/firefox-translations/)
 extension. **You need to manually download these models.** They are conveniently packaged into a single
 archive that can be downloaded at [kotki/releases](https://github.com/kroketio/kotki/releases).

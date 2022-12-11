@@ -2,6 +2,10 @@
 
 for internal development.
 
+## Creating the tiny model archive
+
+see `dl_slim.py`
+
 ## Creating the model archive 
 
 Registry file can be found in [mozilla/firefox-translation](https://raw.githubusercontent.com/mozilla/firefox-translations/main/extension/model/modelRegistry.js).
