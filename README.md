@@ -13,6 +13,10 @@ Built on top of [Bergamot](https://browser.mt/) and
 [Marian](https://github.com/kroketio/marian-dev/) - efficient Neural Machine Translation framework written 
 in pure C++ with minimal dependencies. 
 
+## Web instances ([source](https://github.com/kroketio/kotki-web))
+
+- [kotki.kroket.io](https://kotki.kroket.io)
+
 ## Usage
 
 Kotki is a C++ library but Python bindings are available:
