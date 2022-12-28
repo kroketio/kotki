@@ -51,12 +51,13 @@ class CMakeBuild(build_ext):
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
             f"-DCOMPILE_PYTHON=ON",
+            f"-DVENDORED_LIBS=ON",
             f"-DRECONSTRUCT_GIT=ON",
             f"-DSSPLIT_USE_INTERNAL_PCRE2=ON",
             f"-DBUILD_ARCH={build_arch}",
         ]
 
-        build_args = ["-t", "kotki"]
+        build_args = ["-t", "kotki-lib"]
         # Adding CMake arguments set as environment variable
         # (needed e.g. to build for ARM OSx on conda-forge)
         if "CMAKE_ARGS" in os.environ:

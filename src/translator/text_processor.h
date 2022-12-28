@@ -8,8 +8,9 @@
 #include "data/types.h"
 #include "data/vocab.h"
 #include "definitions.h"
-#include "ssplit.h"
 #include "vocabs.h"
+
+#include "3rd_party/ssplit/ssplit.h"
 
 namespace marian {
 namespace bergamot {

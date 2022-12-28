@@ -2,10 +2,10 @@
 
 #include <unordered_map>
 
-#include "common/build_info.h"
-#include "common/config.h"
-#include "common/regex.h"
-#include "common/version.h"
+#include "marian-lite/common/build_info.h"
+#include "marian-lite/common/config.h"
+#include "marian-lite/common/regex.h"
+#include "marian-lite/common/version.h"
 
 namespace marian {
 namespace bergamot {

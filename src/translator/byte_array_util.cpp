@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <memory>
 
-#include "common/io.h"
+#include "marian-lite/common/io.h"
 #include "data/shortlist.h"
 
 namespace marian {

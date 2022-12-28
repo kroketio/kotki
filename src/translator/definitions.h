@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "aligned.h"
-#include "data/types.h"
-#include "data/vocab_base.h"
+#include "marian-lite/data/types.h"
+
 
 namespace marian {
 namespace bergamot {

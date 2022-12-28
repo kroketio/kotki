@@ -4,12 +4,12 @@
 #include <fstream>
 #include <sstream>
 
-#include "3rd_party/marian-dev/src/3rd_party/CLI/CLI.hpp"
-#include "3rd_party/yaml-cpp/yaml.h"
-#include "common/build_info.h"
-#include "common/config_parser.h"
-#include "common/config_validator.h"
-#include "common/options.h"
+#include "CLI/CLI.hpp"
+#include <yaml-cpp/yaml.h>
+#include "marian-lite/common/build_info.h"
+#include "marian-lite/common/config_parser.h"
+#include "marian-lite/common/config_validator.h"
+#include "marian-lite/common/options.h"
 #include "marian.h"
 
 namespace marian {

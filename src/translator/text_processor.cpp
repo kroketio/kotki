@@ -3,8 +3,8 @@
 #include <vector>
 
 #include "annotation.h"
-#include "common/cli_helper.h"
-#include "common/options.h"
+#include "marian-lite/common/cli_helper.h"
+#include "marian-lite/common/options.h"
 #include "data/types.h"
 #include "definitions.h"
 
@@ -30,12 +30,9 @@ ug::ssplit::SentenceSplitter loadSplitter(const std::string &ssplitPrefixFile) {
   ug::ssplit::SentenceSplitter splitter;
   if (ssplitPrefixFile.size()) {
     std::string interpSsplitPrefixFile = marian::cli::interpolateEnvVars(ssplitPrefixFile);
-    LOG(info, "Loading protected prefixes for sentence splitting from {}", interpSsplitPrefixFile);
     splitter.load(interpSsplitPrefixFile);
   } else {
-    LOG(warn,
-        "Missing list of protected prefixes for sentence splitting. "
-        "Set with --ssplit-prefix-file.");
+    std::cout << "Missing list of protected prefixes for sentence splitting. ";
   }
   return splitter;
 }

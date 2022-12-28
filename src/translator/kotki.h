@@ -12,7 +12,6 @@
 
 #include "nb_prefix.h"
 #include "translation_model.h"
-#include "logging.h"
 
 #include "rapidjson/document.h"
 #include "rapidjson/schema.h"

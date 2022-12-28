@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include "batch.h"
-#include "common/logging.h"
+#include "marian-lite/common/logging.h"
 
 namespace marian {
 namespace bergamot {

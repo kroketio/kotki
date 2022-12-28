@@ -7,7 +7,7 @@
 
 #include "annotation.h"
 #include "cache.h"
-#include "common/logging.h"
+#include "marian-lite/common/logging.h"
 #include "data/types.h"
 #include "definitions.h"
 #include "response.h"

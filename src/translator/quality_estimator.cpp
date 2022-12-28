@@ -63,8 +63,6 @@ LogisticRegressorQualityEstimator::LogisticRegressorQualityEstimator(LogisticReg
 
 LogisticRegressorQualityEstimator LogisticRegressorQualityEstimator::fromAlignedMemory(
     const AlignedMemory& alignedMemory) {
-  LOG(info, "[data] Loading Quality Estimator model from buffer");
-
   const char* ptr = alignedMemory.begin();
   const size_t blobSize = alignedMemory.size();
 

@@ -4,7 +4,7 @@
 
 #include "annotation.h"
 #include "cache.h"
-#include "common/logging.h"
+#include "marian-lite/common/logging.h"
 #include "definitions.h"
 #include "response.h"
 #include "translation_model.h"

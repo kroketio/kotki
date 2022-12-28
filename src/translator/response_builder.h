@@ -3,7 +3,7 @@
 
 #include <optional>
 
-#include "data/types.h"
+#include "marian-lite/data/types.h"
 #include "quality_estimator.h"
 #include "response.h"
 #include "response_options.h"

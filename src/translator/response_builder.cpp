@@ -1,5 +1,4 @@
 #include "response_builder.h"
-
 #include "response_options.h"
 
 namespace marian {

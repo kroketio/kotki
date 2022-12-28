@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "data/types.h"
+#include "marian-lite/data/types.h"
 #include "definitions.h"
 
 namespace marian {

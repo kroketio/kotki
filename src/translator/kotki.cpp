@@ -57,7 +57,6 @@ void KotkiTranslationModel::load() {
 
   model = marian::New<TranslationModel>(config);
 
-  LOG(info, "loaded {}", name);
   this->initialized = true;
 }
 
@@ -78,7 +77,7 @@ Kotki::Kotki() {
 
 std::string Kotki::translate(string input, string language) {
   if(!m_models.count(language)) {
-    LOG(error, "language \"{}\" not found", language);
+    std::cerr << "language << " << language << " not found\n";
     return "";
   }
 
@@ -134,7 +133,7 @@ void Kotki::loadFromString(string config_json, const string &cwd) {
     }
 
     if(!requiredErr.empty()) {
-      LOG(warn, "Skipping model {} because \"{}\" was missing", name, requiredErr);
+      std::cerr << "Skipping model " << name << " because " << requiredErr << " was missing\n";
       continue;
     }
 
@@ -155,7 +154,7 @@ void Kotki::loadFromString(string config_json, const string &cwd) {
     }
 
     if(!pathErr.empty()) {
-      LOG(warn, "Skipping model {} because path \"{}\" does not exist", name, pathErr);
+      std::cerr << "Skipping model " << name << " because path " << pathErr << " does not exist\n";
       continue;
     }
 

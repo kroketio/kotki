@@ -8,7 +8,7 @@
 #include "batching_pool.h"
 #include "byte_array_util.h"
 #include "cache.h"
-#include "common/utils.h"
+#include "marian-lite/common/utils.h"
 #include "data/shortlist.h"
 #include "definitions.h"
 #include "parser.h"

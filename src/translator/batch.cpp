@@ -1,5 +1,4 @@
 #include "batch.h"
-
 #include "request.h"
 
 namespace marian {
@@ -11,8 +10,6 @@ void Batch::log() {
     numTokens += sentence.numTokens();
     maxLength = std::max(maxLength, static_cast<size_t>(sentence.numTokens()));
   }
-
-  LOG(info, "Batch(tokens={}, max-length={}, sentences_={})", numTokens, maxLength, sentences_.size());
 }
 
 void Batch::add(const RequestSentence &sentence) { sentences_.push_back(sentence); }

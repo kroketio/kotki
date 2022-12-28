@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "batch.h"
-#include "common/options.h"
+#include "marian-lite/common/options.h"
 #include "data/corpus_base.h"
 #include "definitions.h"
 #include "request.h"

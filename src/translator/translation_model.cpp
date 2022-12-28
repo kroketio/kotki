@@ -3,7 +3,7 @@
 #include "batch.h"
 #include "byte_array_util.h"
 #include "cache.h"
-#include "common/logging.h"
+#include "marian-lite/common/logging.h"
 #include "data/corpus.h"
 #include "data/text_input.h"
 #include "parser.h"
