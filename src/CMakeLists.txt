@@ -7,15 +7,13 @@ file(GLOB_RECURSE HDRS kotki/*.h)
 add_library(kotki-lib SHARED ${SRCS} ${HDRS})
 
 target_link_libraries(kotki-lib PUBLIC
-        ${MARIAN-LITE_LIBRARY}
+        ${MARIAN-LITE_LIBRARIES}
         yaml-cpp
         )
+
 target_include_directories(kotki-lib PUBLIC
         ${RAPIDJSON_INCLUDE_DIRS}
-        ${MARIAN-LITE_DIRECTORY}
-        ${MARIAN-LITE_DIRECTORY}/marian-lite/
-        ${MARIAN-LITE_DIRECTORY}/marian-lite/3rd_party/
-        ${MARIAN-LITE_DIRECTORY}/marian-lite/3rd_party/proto/
+        ${MARIAN-LITE_INCLUDE_DIRS}
         )
 
 set_target_properties(kotki-lib PROPERTIES
@@ -58,5 +56,6 @@ endif()
 
 message(STATUS "=========================================== kotki-lib: ${CMAKE_PROJECT_VERSION}")
 message(STATUS "SHARED: ${SHARED} | STATIC: ${STATIC}")
-message(STATUS "marian-lite: ${MARIAN-LITE_LIBRARY}")
+message(STATUS "Build demo application(s): ${BUILD_DEMO}")
+message(STATUS "marian-lite: ${MARIAN-LITE_LIBRARIES}")
 message(STATUS "===========================================")

@@ -16,11 +16,10 @@ if(STATIC)
 endif()
 
 include(FindCcache)
+find_package(PkgConfig REQUIRED)
 find_package(rapidjson REQUIRED)
-find_library(MARIAN-LITE_LIBRARY NAMES marian-lite REQUIRED)
-find_path(MARIAN-LITE_DIRECTORY
-        NAMES marian-lite/marian.h
-        REQUIRED)
+
+pkg_check_modules(MARIAN-LITE REQUIRED marian-lite)
 
 add_subdirectory(src)
 
