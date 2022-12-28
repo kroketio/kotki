@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.18)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-project(kotki VERSION 0.0.3 LANGUAGES CXX C)
+project(kotki
+        VERSION 0.0.3
+        DESCRIPTION "Library for language translation without using the cloud."
+        HOMEPAGE_URL https://github.com/kroketio/kotki
+        LANGUAGES CXX C)
 set(CMAKE_CXX_STANDARD 17)
+
+# initializes ${CMAKE_INSTALL_*DIR} to sane defaults
+include(GNUInstallDirs)
 
 option(STATIC "Produce static binary" OFF)
 option(SHARED "Produce shared binary" ON)

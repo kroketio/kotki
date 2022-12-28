@@ -4,13 +4,8 @@
 //    make -Cbuild -j6
 // the executable will be located at build/app/kotki-cli
 #include <string>
-#include "kotki/byte_array_util.h"
-#include "kotki/response_options.h"
-#include "kotki/utils.h"
 #include "kotki/kotki.h"
-#include "kotki/nb_prefix.h"
 
-using namespace marian::bergamot;
 using namespace std;
 
 

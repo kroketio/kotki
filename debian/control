@@ -1,0 +1,28 @@
+Source: libkotki
+Section: libs
+Priority: extra
+Maintainer: Sander <code@kroket.io>
+Build-Depends: debhelper (>= 10),
+    cmake,
+    ccache,
+    pkg-config,
+    libmarian-lite,
+    libyaml-cpp-dev,
+    pybind11-dev,
+    libpathie-cpp,
+    rapidjson-dev,
+Homepage: https://github.com/kroketio/kotki
+XSBC-Bugtracker: https://github.com/kroketio/kotki/issues
+Vcs-Git: https://github.com/kroketio/kotki/
+Vcs-Browser: https://github.com/kroketio/kotki/
+
+
+Package: libkotki
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+    libmarian-lite,
+    libyaml-cpp-dev,
+    libpathie-cpp,
+    pybind11-dev,
+    rapidjson-dev,
+Description: Library for language translation without using the cloud.

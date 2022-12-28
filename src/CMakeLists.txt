@@ -53,6 +53,10 @@ if(BUILD_DEMO)
             )
 endif()
 
+configure_file("${PROJECT_SOURCE_DIR}/kotki.pc.in" "kotki.pc" @ONLY)
+if (NOT MSVC)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kotki.pc" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+endif()
 
 message(STATUS "=========================================== kotki-lib: ${CMAKE_PROJECT_VERSION}")
 message(STATUS "SHARED: ${SHARED} | STATIC: ${STATIC}")

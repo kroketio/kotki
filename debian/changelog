@@ -1,0 +1,6 @@
+libkotki (0.0.3) unstable; urgency=medium
+
+  * Initial debian packaging
+
+ -- Sander <code@kroket.io>  Wed, 28 Dec 2022 20:33:36 +0100
+
