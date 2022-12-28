@@ -6,9 +6,9 @@
 #include <iostream>
 #include <filesystem>
 
-#include "translator//byte_array_util.h"
-#include "translator/response_options.h"
-#include "translator/kotki.h"
+#include "kotki/byte_array_util.h"
+#include "kotki/response_options.h"
+#include "kotki/kotki.h"
 
 using namespace marian::bergamot;
 using namespace std;
