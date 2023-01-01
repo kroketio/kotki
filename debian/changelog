@@ -1,3 +1,11 @@
+libkotki (0.4.8) unstable; urgency=medium
+
+  * Switch to marian-lite
+  * Support vendoring dependencies during CMake install
+  * Fix python bindings
+
+ -- Sander <code@kroket.io>  Sun, 2 Jan 2022 20:33:36 +0100
+
 libkotki (0.0.3) unstable; urgency=medium
 
   * Initial debian packaging

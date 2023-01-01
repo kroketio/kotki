@@ -6,14 +6,23 @@ file(GLOB_RECURSE SRCS kotki/*.cpp)
 file(GLOB_RECURSE HDRS kotki/*.h)
 add_library(kotki-lib SHARED ${SRCS} ${HDRS})
 
+if(VENDORED_LIBS)
+    target_link_libraries(kotki-lib PUBLIC marian-lite-SHARED)
+    target_include_directories(kotki-lib PUBLIC
+            ${marian-lite_BINARY_DIR}/src/include
+            ${marian-lite_BINARY_DIR}/src/include/marian-lite
+            )
+else()
+    target_link_libraries(kotki-lib PUBLIC marian-lite::marian-lite)
+endif()
+
+
 target_link_libraries(kotki-lib PUBLIC
-        ${MARIAN-LITE_LIBRARIES}
         yaml-cpp
         )
 
 target_include_directories(kotki-lib PUBLIC
         ${RAPIDJSON_INCLUDE_DIRS}
-        ${MARIAN-LITE_INCLUDE_DIRS}
         )
 
 set_target_properties(kotki-lib PROPERTIES
@@ -58,8 +67,10 @@ if (NOT MSVC)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kotki.pc" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endif()
 
-message(STATUS "=========================================== kotki-lib: ${CMAKE_PROJECT_VERSION}")
-message(STATUS "SHARED: ${SHARED} | STATIC: ${STATIC}")
+message(STATUS "=========================================== kotki-lib")
+message(STATUS "SHARED: ${SHARED} | STATIC: ${STATIC} | VENDORED: ${VENDORED_LIBS}")
 message(STATUS "Build demo application(s): ${BUILD_DEMO}")
+if(NOT VENDORED_LIBS)
 message(STATUS "marian-lite: ${MARIAN-LITE_LIBRARIES}")
-message(STATUS "===========================================")
+endif()
+

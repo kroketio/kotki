@@ -10,6 +10,10 @@ from setuptools import Command, Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
 from setuptools.command.build_py import build_py as _build_py
 
+
+if sys.platform != "linux" and sys.platform != "linux2":
+    raise Exception("Only Linux is supported at this moment.")
+
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
     "win32": "Win32",
@@ -57,7 +61,7 @@ class CMakeBuild(build_ext):
             f"-DBUILD_ARCH={build_arch}",
         ]
 
-        build_args = ["-t", "kotki-lib"]
+        build_args = ["-t", "kotki"]
         # Adding CMake arguments set as environment variable
         # (needed e.g. to build for ARM OSx on conda-forge)
         if "CMAKE_ARGS" in os.environ:
@@ -133,7 +137,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 # Import the README and use it as the long-description.
 # Note: this will only work if 'README.md' is present in your MANIFEST.in file!
 long_description = ""
-with io.open(os.path.join(here, "bindings/python/README.md"), encoding="utf-8") as f:
+with io.open(os.path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = "\n" + f.read()
 
 version = None
@@ -142,42 +146,6 @@ with open(os.path.join(here, "src", "BERGAMOT_VERSION")) as f:
     suffix = os.environ.get("PYTHON_LOCAL_VERSION_IDENTIFIER", None)
     if suffix:
         version = "{}+{}".format(version, suffix)
-
-
-class UploadCommand(Command):
-    """Support setup.py upload."""
-
-    description = "Build and publish the package."
-    user_options = []
-
-    @staticmethod
-    def status(s):
-        """Prints things in bold."""
-        print("\033[1m{0}\033[0m".format(s))
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        try:
-            self.status("Removing previous builds…")
-            rmtree(os.path.join(here, "dist"))
-        except OSError:
-            pass
-
-        self.status("Building Source and Wheel (universal) distribution…")
-        os.system("{0} setup.py sdist bdist_wheel --universal".format(sys.executable))
-
-        self.status("Pushing git tags…")
-        os.system("git push --tags")
-
-        self.status("Uploading the package to PyPI via Twine…")
-        os.system("twine upload dist/*")
-
-        sys.exit()
 
 
 class build_py(_build_py):

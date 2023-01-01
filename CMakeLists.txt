@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.16)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 project(kotki
         VERSION 0.0.3
@@ -26,11 +26,14 @@ include(FindCcache)
 find_package(PkgConfig REQUIRED)
 find_package(rapidjson REQUIRED)
 
-pkg_check_modules(MARIAN-LITE REQUIRED marian-lite)
+if(VENDORED_LIBS)
+    include(cmake/DownloadAllTheThings.cmake)
+else()
+    find_package(marian-lite REQUIRED)
+endif()
 
 add_subdirectory(src)
 
 if(COMPILE_PYTHON)
-    add_subdirectory(pybind11)
+    add_subdirectory(bindings/python)
 endif(COMPILE_PYTHON)
-

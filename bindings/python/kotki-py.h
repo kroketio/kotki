@@ -1,13 +1,13 @@
 #include <string>
 #include <vector>
 
-#include <translator/annotation.h>
-#include <translator/parser.h>
-#include <translator/project_version.h>
-#include <translator/response.h>
-#include <translator/response_options.h>
-#include <translator/kotki.h>
-#include <translator/translation_model.h>
+#include <kotki/annotation.h>
+#include <kotki/parser.h>
+#include <kotki/project_version.h>
+#include <kotki/response.h>
+#include <kotki/response_options.h>
+#include <kotki/kotki.h>
+#include <kotki/translation_model.h>
 
 #include <pybind11/iostream.h>
 #include <pybind11/pybind11.h>
