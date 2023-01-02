@@ -8,9 +8,8 @@
 *
 **/
 
-#include "kotki.h"
-#include "utils.h"
-#include "cfgpath.h"
+#include "kotki/kotki.h"
+#include "kotki/utils.h"
 
 string KotkiTranslationModel::translate(string input) {
   if(!initialized) { this->load(); }
@@ -62,12 +61,12 @@ void KotkiTranslationModel::load() {
 
 string KotkiTranslationModel::findNBPrefixFile() {
   auto fileName = "nonbreaking_prefix." + this->langFrom;
-  auto filePath = this->kotki_->kotkiCfgNbDir + fileName;
+  auto filePath = this->kotki_->kotkiCfgNbDir.string() + fileName;
   if(fs::exists(filePath)) { return filePath; }
   if(this->langFrom == "bg") {
-    return this->kotki_->kotkiCfgNbDir + "nonbreaking_prefix.ru";  // close 'nuff
+    return this->kotki_->kotkiCfgNbDir.string() + "nonbreaking_prefix.ru";  // close 'nuff
   }
-  return this->kotki_->kotkiCfgNbDir + "nonbreaking_prefix." + nb_prefix_default;
+  return this->kotki_->kotkiCfgNbDir.string() + "nonbreaking_prefix." + nb_prefix_default;
 }
 
 Kotki::Kotki() {
@@ -90,39 +89,81 @@ std::string Kotki::translate(string input, string language) {
   return result;
 }
 
-std::vector<string> Kotki::listModels() {
-  vector<string> langs;
-  for (auto const& [key, val]: m_models) {
-    langs.emplace_back(key);
+map<string, map<string, string>> Kotki::listModels() {
+  map<string, map<string, string>> data;
+  for (auto const& [name, kotkiTranslationModel]: m_models) {
+    data[name] = kotkiTranslationModel->toJson();
   }
-  return langs;
+  return data;
 }
 
-void Kotki::loadRegistryFromFile(const fs::path& path) {
-  string cwd = path.parent_path();
-  if(!endsWith(cwd, "/")) { cwd += '/'; }
+// Recursively search for 'registry.json' in '~/.config/kotki/models/', auto-detect translation models
+// @TODO: try to find the most recent `registry.json`
+void Kotki::load() {
+  std::map<filesystem::path, Document*> results;
+  std::vector<filesystem::path> paths = findFiles(kotkiCfgModelDir, "registry.json");
+
+  for(const auto& path : paths) {
+    try {
+      auto doc = jsonLoads(readFile(path).str());
+      results[path] = doc;
+    } catch(const std::exception&) {
+      std::cerr << "skipping path " + path.string();
+    }
+  }
+
+  if(results.empty()) {
+    throw std::runtime_error("Could not auto-find models in '" + kotkiCfgModelDir.string() +
+                             "'. Read github.com/kroketio/kotki/releases/ for instructions.");
+  }
+
+  // @TODO: implement latest version detection
+//  for (auto const& [key, val] : results) {
+//    auto rootObj = m_doc.GetObject();
+//    if(rootObj.HasMember("version")){
+//
+//    }
+//  }
+
+  // @TODO: we just pick the first occurrence for now
+  for (auto const& [_path, jsonDoc] : results) {
+    auto cwd = _path.parent_path().string();
+    load(jsonDoc, cwd);
+    break;
+  }
+}
+
+void Kotki::load(const fs::path& path) {
   if(!std::filesystem::exists(path))
     throw std::runtime_error("could not read " + path.string());
+  if(fs::is_directory(path))
+    throw std::runtime_error("path is not a file: " + path.string());
 
-  std::ifstream fileStream(path);
-  std::stringstream buffer;
-  buffer << fileStream.rdbuf();
+  string cwd = path.parent_path().string() + "/";
+  Document *cfg;
 
-  return loadFromString(buffer.str(), cwd);
+  try {
+    auto buf = readFile(path);
+    cfg = jsonLoads(buf.str());
+  } catch(const std::exception&) {
+    throw std::runtime_error("error parsing JSON: " + path.string());
+  }
+  return load(cfg, cwd);
 }
 
-void Kotki::loadFromString(string config_json, const string &cwd) {
-  m_doc.Parse(config_json.c_str());
+void Kotki::load(Document *config_json, const fs::path &cwd) {
+  if(!fs::is_directory(cwd))
+    throw std::runtime_error("cwd must be a directory: " + cwd.string());
 
-  if(m_doc.HasParseError()) {
-    throw std::runtime_error("could not parse JSON configuration.");
-  }
+  if(config_json == nullptr)
+    throw std::runtime_error("config may not be empty.");
 
-  auto rootObj = m_doc.GetObject();
+  const auto cwdStr = cwd.string() + "/";
+  const auto rootObj = config_json->GetObject();
   for (auto const& group : rootObj){
     const auto *name = group.name.GetString();
     if(strlen(name) != 4) { continue; }
-    auto obj = group.value.GetObject();
+    const auto obj = group.value.GetObject();
 
     string requiredErr;
     for(auto const& required: {"model", "lex", "vocab"}) {
@@ -137,13 +178,13 @@ void Kotki::loadFromString(string config_json, const string &cwd) {
       continue;
     }
 
-    auto modelObj = obj["model"].GetObject();
-    auto lexObj = obj["lex"].GetObject();
-    auto vocabObj = obj["vocab"].GetObject();
+    const auto modelObj = obj["model"].GetObject();
+    const auto lexObj = obj["lex"].GetObject();
+    const auto vocabObj = obj["vocab"].GetObject();
 
-    auto modelPath = cwd + modelObj["name"].GetString();
-    auto lexPath = cwd + lexObj["name"].GetString();
-    auto vocabPath = cwd + vocabObj["name"].GetString();
+    auto modelPath = cwdStr + modelObj["name"].GetString();
+    auto lexPath = cwdStr + lexObj["name"].GetString();
+    auto vocabPath = cwdStr + vocabObj["name"].GetString();
 
     string pathErr;
     for(const auto &path: {modelPath, lexPath, vocabPath}) {
@@ -158,35 +199,62 @@ void Kotki::loadFromString(string config_json, const string &cwd) {
       continue;
     }
 
-    auto *kmodel = new KotkiTranslationModel(name, modelPath, lexPath, vocabPath, this);
+    auto *kmodel = new KotkiTranslationModel(name, cwd, modelPath, lexPath, vocabPath, this);
+
+    if(m_models.count(name)) {
+      delete m_models[name];
+    }
 
     m_models[name] = kmodel;
   }
+
+  delete config_json;
 }
 
 void Kotki::ensureConfigDirectory() {
-  // create kotki data dir
-  char cfgdir[512];
-  get_user_data_folder(cfgdir, sizeof(cfgdir), "kotki");
-  if(cfgdir[0] == 0) {
-    throw std::runtime_error("could not determine user data folder");
+  // create kotki data dir in ~/.config/kotki/
+  kotkiCfgDir = find_config_directory() + "/kotki";
+  kotkiCfgNbDir = kotkiCfgDir.string() + "/nb_prefixes/";
+  kotkiCfgModelDir = kotkiCfgDir.string() + "/models/";
+
+  if(!fs::is_directory(kotkiCfgDir)) {
+    fs::create_directories(kotkiCfgDir);
   }
-
-  kotkiCfgDir = string(cfgdir);
-  fs::create_directories(cfgdir);
-
-  kotkiCfgNbDir = kotkiCfgDir + "/nb_prefixes/";
   if(!fs::is_directory(kotkiCfgNbDir)) {
     fs::create_directory(kotkiCfgNbDir);
+  }
+  if(!fs::is_directory(kotkiCfgModelDir)) {
+    fs::create_directories(kotkiCfgModelDir);
   }
 }
 
 void Kotki::ensureNBPrefixes() const {
   // write the 'nonbreaking_prefix files' to kotki cfg dir, marian needs them.
   for (auto const& [lang_name, data] : nb_prefix_lookup) {
-    const auto pathDestination = kotkiCfgNbDir + "nonbreaking_prefix." + lang_name;
+    const auto pathDestination = kotkiCfgNbDir.string() + "nonbreaking_prefix." + lang_name;
     std::ofstream out(pathDestination);
     out << data;
     out.close();
   }
+}
+
+string Kotki::find_config_directory() {
+  std::string config_directory;
+
+  // Check the XDG_CONFIG_HOME environment variable
+  const char* xdg_config_home = std::getenv("XDG_CONFIG_HOME");
+  if (xdg_config_home) {
+    config_directory = xdg_config_home;
+  } else {
+    // If XDG_CONFIG_HOME is not set, use the default value of "$HOME/.config"
+    const char* home = std::getenv("HOME");
+    if (home) {
+      config_directory = std::string(home) + "/.config";
+    } else {
+      // If HOME is not set, use the current working directory
+      config_directory = std::filesystem::current_path().string();
+    }
+  }
+
+  return config_directory;
 }

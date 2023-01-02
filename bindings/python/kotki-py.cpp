@@ -1,8 +1,12 @@
 #include "kotki-py.h"
 
-void loadRegistry(const string& pathToJsonConfig) {
+void load() {
+  kotki_->load();
+}
+
+void load(const string& pathToJsonConfig) {
   if(kotki_ == nullptr) _init();
-  kotki_->loadRegistryFromFile(pathToJsonConfig);
+  kotki_->load(pathToJsonConfig);
 }
 
 string translate(const string& input, const string& language) {
@@ -10,7 +14,7 @@ string translate(const string& input, const string& language) {
   return kotki_->translate(input, language);
 }
 
-vector<string> listModels() {
+map<string, map<string, string>> listModels() {
   if(kotki_ == nullptr) _init();
   return kotki_->listModels();
 }

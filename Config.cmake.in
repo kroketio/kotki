@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(marian-lite)
+
+include("${CMAKE_CURRENT_LIST_DIR}/kotki-libTargets.cmake")
+
+check_required_components(kotki-lib)

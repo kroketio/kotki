@@ -1,5 +1,5 @@
-#include "definitions.h"
-#include "marian.h"
+#include "kotki/definitions.h"
+#include "marian-lite/marian.h"
 
 namespace marian {
 namespace bergamot {

@@ -1,5 +1,5 @@
-#include "batch.h"
-#include "request.h"
+#include "kotki/batch.h"
+#include "kotki/request.h"
 
 namespace marian {
 namespace bergamot {

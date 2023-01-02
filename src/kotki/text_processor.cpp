@@ -1,12 +1,12 @@
-#include "text_processor.h"
+#include "kotki/text_processor.h"
 
 #include <vector>
 
-#include "annotation.h"
+#include "kotki/annotation.h"
 #include "marian-lite/common/cli_helper.h"
 #include "marian-lite/common/options.h"
-#include "data/types.h"
-#include "definitions.h"
+#include "marian-lite/data/types.h"
+#include "kotki/definitions.h"
 
 namespace marian {
 namespace bergamot {

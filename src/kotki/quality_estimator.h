@@ -3,9 +3,9 @@
 #include <array>
 #include <vector>
 
-#include "annotation.h"
-#include "response.h"
-#include "translator/history.h"
+#include "kotki/annotation.h"
+#include "kotki/response.h"
+#include "marian-lite/translator/history.h"
 
 namespace marian::bergamot {
 

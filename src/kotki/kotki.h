@@ -10,8 +10,8 @@
 #include <map>
 #include <regex>
 
-#include "nb_prefix.h"
-#include "translation_model.h"
+#include "kotki/nb_prefix.h"
+#include "kotki/translation_model.h"
 
 #include "rapidjson/document.h"
 #include "rapidjson/schema.h"
@@ -24,8 +24,9 @@ namespace fs = std::filesystem;
 class Kotki;
 struct KotkiTranslationModel {
   // name should be 4 chars, e.g: 'nlen' (Dutch to English)
-  explicit KotkiTranslationModel(string name, string pathModel, string pathLex, string pathVocab, Kotki* kotki)
+  explicit KotkiTranslationModel(string name, string cwd, string pathModel, string pathLex, string pathVocab, Kotki* kotki)
       : name(name),
+        cwd(cwd),
         pathModel_(std::move(pathModel)),
         pathLex_(std::move(pathLex)),
         pathVocab_(std::move(pathVocab)),
@@ -35,13 +36,23 @@ struct KotkiTranslationModel {
   }
 
   string name;
+  string cwd;
   string langFrom;
   string langTo;
   bool initialized = false;
   void load();
   string translate(string input);
-
   shared_ptr<TranslationModel> model;
+  map<string, string> toJson() {
+    map<string, string> rtn;
+    rtn["name"] = this->name;
+    rtn["cwd"] = this->cwd;
+    rtn["version"] = "";  // @TODO: support versions
+    rtn["model"] = this->pathModel_;
+    rtn["lex"] = this->pathLex_;
+    rtn["vocab"] = this->pathVocab_;
+    return rtn;
+  }
  private:
   string pathModel_;
   string pathLex_;
@@ -55,18 +66,21 @@ class Kotki {
  public:
   Kotki();
 
-  void loadFromString(string config_json, const string &cwd);
-  void loadRegistryFromFile(const fs::path& path);
+  void load();
+  void load(const fs::path& path);
+  void load(Document *config_json, const fs::path &path);
+
   string translate(string input, string language);
-  vector<string> listModels();
+  map<string, map<string, string>> listModels();
   void ensureConfigDirectory();
   void ensureNBPrefixes() const;
+  static string find_config_directory();
 
-  string kotkiCfgDir;
-  string kotkiCfgNbDir;
+  std::filesystem::path kotkiCfgDir;
+  std::filesystem::path kotkiCfgNbDir;
+  std::filesystem::path kotkiCfgModelDir;
 
  private:
-  Document m_doc;
   map<string, KotkiTranslationModel*> m_models;
 };
 

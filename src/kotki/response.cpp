@@ -1,7 +1,7 @@
-#include "response.h"
+#include "kotki/response.h"
 
-#include "annotation.h"
-#include "definitions.h"
+#include "kotki/annotation.h"
+#include "kotki/definitions.h"
 
 namespace marian::bergamot {
 

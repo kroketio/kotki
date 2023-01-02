@@ -4,10 +4,10 @@
 #include <optional>
 
 #include "marian-lite/data/types.h"
-#include "quality_estimator.h"
-#include "response.h"
-#include "response_options.h"
-#include "vocabs.h"
+#include "kotki/quality_estimator.h"
+#include "kotki/response.h"
+#include "kotki/response_options.h"
+#include "kotki/vocabs.h"
 
 // For now we will work with this, to avoid complaints another structure is hard
 // to operate with.

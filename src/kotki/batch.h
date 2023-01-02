@@ -2,7 +2,7 @@
 #define SRC_BERGAMOT_BATCH_H
 
 #include "request.h"
-#include "translator/beam_search.h"
+#include "marian-lite/translator/beam_search.h"
 
 namespace marian {
 namespace bergamot {

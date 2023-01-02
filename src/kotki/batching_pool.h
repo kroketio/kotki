@@ -4,11 +4,11 @@
 #include <set>
 #include <vector>
 
-#include "batch.h"
+#include "kotki/batch.h"
 #include "marian-lite/common/options.h"
-#include "data/corpus_base.h"
-#include "definitions.h"
-#include "request.h"
+#include "marian-lite/data/corpus_base.h"
+#include "kotki/definitions.h"
+#include "kotki/request.h"
 
 namespace marian {
 namespace bergamot {

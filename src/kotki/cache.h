@@ -4,8 +4,8 @@
 #include <mutex>
 #include <vector>
 
-#include "definitions.h"
-#include "translator/history.h"
+#include "kotki/definitions.h"
+#include "marian-lite/translator/history.h"
 
 namespace marian::bergamot {
 

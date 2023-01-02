@@ -5,14 +5,14 @@
 #include <future>
 #include <vector>
 
-#include "annotation.h"
-#include "cache.h"
+#include "kotki/annotation.h"
+#include "kotki/cache.h"
 #include "marian-lite/common/logging.h"
-#include "data/types.h"
-#include "definitions.h"
-#include "response.h"
-#include "response_builder.h"
-#include "translator/beam_search.h"
+#include "marian-lite/data/types.h"
+#include "kotki/definitions.h"
+#include "kotki/response.h"
+#include "kotki/response_builder.h"
+#include "marian-lite/translator/beam_search.h"
 
 namespace marian {
 namespace bergamot {

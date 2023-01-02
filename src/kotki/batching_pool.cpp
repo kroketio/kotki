@@ -1,8 +1,8 @@
-#include "batching_pool.h"
+#include "kotki/batching_pool.h"
 
 #include <cassert>
 
-#include "batch.h"
+#include "kotki/batch.h"
 #include "marian-lite/common/logging.h"
 
 namespace marian {

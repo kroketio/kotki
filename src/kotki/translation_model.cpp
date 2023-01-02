@@ -1,13 +1,13 @@
 #include "translation_model.h"
 
-#include "batch.h"
-#include "byte_array_util.h"
-#include "cache.h"
+#include "kotki/batch.h"
+#include "kotki/byte_array_util.h"
+#include "kotki/cache.h"
 #include "marian-lite/common/logging.h"
-#include "data/corpus.h"
-#include "data/text_input.h"
-#include "parser.h"
-#include "translator/beam_search.h"
+#include "marian-lite/data/corpus.h"
+#include "marian-lite/data/text_input.h"
+#include "kotki/parser.h"
+#include "marian-lite/translator/beam_search.h"
 
 namespace marian {
 namespace bergamot {

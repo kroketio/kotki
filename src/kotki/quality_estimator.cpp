@@ -1,4 +1,4 @@
-#include "quality_estimator.h"
+#include "kotki/quality_estimator.h"
 
 namespace marian::bergamot {
 

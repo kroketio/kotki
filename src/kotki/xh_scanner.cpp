@@ -1,7 +1,7 @@
 // https://www.codeproject.com/Articles/14076/Fast-and-Compact-HTML-XML-Scanner-Tokenizer
 // BSD license
 
-#include "xh_scanner.h"
+#include "kotki/xh_scanner.h"
 
 #include <cassert>
 #include <cctype>

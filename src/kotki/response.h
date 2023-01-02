@@ -5,11 +5,11 @@
 #include <string>
 #include <vector>
 
-#include "annotation.h"
-#include "data/alignment.h"
-#include "data/types.h"
-#include "definitions.h"
-#include "translator/beam_search.h"
+#include "kotki/annotation.h"
+#include "marian-lite/data/alignment.h"
+#include "marian-lite/data/types.h"
+#include "kotki/definitions.h"
+#include "marian-lite/translator/beam_search.h"
 
 namespace marian {
 namespace bergamot {

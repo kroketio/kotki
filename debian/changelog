@@ -1,3 +1,15 @@
+libkotki (0.4.9) unstable; urgency=medium
+
+  * Auto-detect translation models under ~/.config/kotki/models/ if load() is called without argument.
+  * Change listModels() function signature to include more information
+  * Change relative includes to absolute
+  * Bump marian-lite tag (vendored installs only)
+  * Fix and write CMake Config file on install
+  * Include CMake Config file in Python MANIFEST
+  * Update README
+
+ -- Sander <code@kroket.io>  Tue, 3 Jan 2022 06:03:36 +0100
+
 libkotki (0.4.8) unstable; urgency=medium
 
   * Switch to marian-lite

@@ -1,5 +1,5 @@
-#include "response_builder.h"
-#include "response_options.h"
+#include "kotki/response_builder.h"
+#include "kotki/response_options.h"
 
 namespace marian {
 namespace bergamot {

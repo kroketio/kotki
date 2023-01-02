@@ -1,4 +1,4 @@
-// Translate .srt subtitle files to a given language.
+// Silly program that translates .srt subtitle files to a given language, for demo purposes.
 //    cmake -Bbuild
 //    make -Cbuild -j6
 // the executable will be located at build/app/kotki-srt
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     throw std::runtime_error("could not read " + subPath);
 
   auto *kotki = new Kotki();
-  kotki->loadRegistryFromFile(regPath);
+  kotki->load(regPath);
 
   string line;
   ifstream srt;

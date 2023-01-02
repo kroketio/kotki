@@ -3,14 +3,14 @@
 
 #include <vector>
 
-#include "aligned.h"
-#include "annotation.h"
-#include "data/types.h"
-#include "data/vocab.h"
-#include "definitions.h"
-#include "vocabs.h"
+#include "kotki/aligned.h"
+#include "kotki/annotation.h"
+#include "marian-lite/data/types.h"
+#include "marian-lite/data/vocab.h"
+#include "kotki/definitions.h"
+#include "kotki/vocabs.h"
 
-#include "3rd_party/ssplit/ssplit.h"
+#include "marian-lite/3rd_party/ssplit/ssplit.h"
 
 namespace marian {
 namespace bergamot {

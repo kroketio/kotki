@@ -1,19 +1,20 @@
 cmake_minimum_required(VERSION 3.16)
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 project(kotki
-        VERSION 0.0.3
+        VERSION 0.4.9
         DESCRIPTION "Library for language translation without using the cloud."
         HOMEPAGE_URL https://github.com/kroketio/kotki
         LANGUAGES CXX C)
 set(CMAKE_CXX_STANDARD 17)
 
-# initializes ${CMAKE_INSTALL_*DIR} to sane defaults
-include(GNUInstallDirs)
+include(GNUInstallDirs)  # initializes ${CMAKE_INSTALL_*DIR} to sane defaults
+include(CMakePackageConfigHelpers)
 
 option(STATIC "Produce static binary" OFF)
 option(SHARED "Produce shared binary" ON)
 option(BUILD_DEMO "Build example demo application(s)" OFF)
 option(COMPILE_PYTHON "Compile Python bindings" OFF)
+option(VENDORED_LIBS "Download dependencies during CMake configure time. Not recommended, off by default. Used during 'pip install kotki -v'" OFF)
 
 if(STATIC)
     message(STATUS "${PROJECT_NAME} - STATIC BUILD ON")

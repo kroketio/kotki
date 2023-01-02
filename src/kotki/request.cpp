@@ -2,12 +2,12 @@
 
 #include <string>
 
-#include "annotation.h"
-#include "cache.h"
+#include "kotki/annotation.h"
+#include "kotki/cache.h"
 #include "marian-lite/common/logging.h"
-#include "definitions.h"
-#include "response.h"
-#include "translation_model.h"
+#include "kotki/definitions.h"
+#include "kotki/response.h"
+#include "kotki/translation_model.h"
 
 namespace marian {
 namespace bergamot {

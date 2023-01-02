@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "aligned.h"
+#include "kotki/aligned.h"
 #include "marian-lite/data/types.h"
 
 

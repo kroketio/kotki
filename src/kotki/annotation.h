@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "marian-lite/data/types.h"
-#include "definitions.h"
+#include "kotki/definitions.h"
 
 namespace marian {
 namespace bergamot {

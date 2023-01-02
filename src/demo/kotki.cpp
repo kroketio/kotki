@@ -1,4 +1,4 @@
-// Sample C++ example that links against Kotki (see CMakeLists.txt)
+// Sample C++ example that links against kotki-lib (see ../CMakeLists.txt)
 // to build (from root project dir):
 //    cmake -Bbuild
 //    make -Cbuild -j6
@@ -20,14 +20,7 @@ int main(int argc, char *argv[]) {
 
   string pathRegistry = argv[1];
   auto *kotki = new Kotki();
-  kotki->loadRegistryFromFile(pathRegistry);
-
-  // list languages
-  // cout << "Available languages: ";
-  // std::vector<string> langs = kotki->listModels();
-  // for(const auto &lang: kotki->listModels())
-  //   cout << lang << ", ";
-  // cout << endl << endl;
+  kotki->load(pathRegistry);
 
   cout << kotki->translate(argv[3], argv[2]);
 

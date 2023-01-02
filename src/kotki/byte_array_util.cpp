@@ -1,10 +1,10 @@
-#include "byte_array_util.h"
+#include "kotki/byte_array_util.h"
 
 #include <cstdlib>
 #include <memory>
 
 #include "marian-lite/common/io.h"
-#include "data/shortlist.h"
+#include "marian-lite/data/shortlist.h"
 
 namespace marian {
 namespace bergamot {

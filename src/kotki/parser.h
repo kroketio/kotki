@@ -4,13 +4,13 @@
 #include <fstream>
 #include <sstream>
 
-#include "CLI/CLI.hpp"
+#include "marian-lite/3rd_party/CLI/CLI.hpp"
 #include <yaml-cpp/yaml.h>
 #include "marian-lite/common/build_info.h"
 #include "marian-lite/common/config_parser.h"
 #include "marian-lite/common/config_validator.h"
 #include "marian-lite/common/options.h"
-#include "marian.h"
+#include "marian-lite/marian.h"
 
 namespace marian {
 namespace bergamot {

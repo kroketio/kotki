@@ -4,19 +4,19 @@
 #include <string>
 #include <vector>
 
-#include "batch.h"
-#include "batching_pool.h"
-#include "byte_array_util.h"
-#include "cache.h"
+#include "kotki/batch.h"
+#include "kotki/batching_pool.h"
+#include "kotki/byte_array_util.h"
+#include "kotki/cache.h"
 #include "marian-lite/common/utils.h"
-#include "data/shortlist.h"
-#include "definitions.h"
-#include "parser.h"
-#include "request.h"
-#include "text_processor.h"
-#include "translator/history.h"
-#include "translator/scorers.h"
-#include "vocabs.h"
+#include "marian-lite/data/shortlist.h"
+#include "kotki/definitions.h"
+#include "kotki/parser.h"
+#include "kotki/request.h"
+#include "kotki/text_processor.h"
+#include "marian-lite/translator/history.h"
+#include "marian-lite/translator/scorers.h"
+#include "kotki/vocabs.h"
 
 namespace marian {
 namespace bergamot {
