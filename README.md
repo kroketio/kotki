@@ -2,7 +2,7 @@
 
 [![License: MPL v2](https://img.shields.io/badge/License-MPL%20v2-blue.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
 
-Simple interface to [Bergamot](https://browser.mt/); Fast language translations without using the cloud using Neural Machine techniques. Written in C++.
+Fast language translations without using the cloud using Neural Machine techniques. Written in C++. Based on [Bergamot](https://browser.mt/).
 
 Uses language models borrowed from the Mozilla extension ['Firefox Translations'](https://addons.mozilla.org/en-US/firefox/addon/firefox-translations/).
 
