@@ -1,3 +1,9 @@
+libkotki (0.5.1) unstable; urgency=medium
+
+  * Fix Python bindings, change function signature loadRegistry() to load(), as per .cpp
+
+ -- Sander <code@kroket.io>  Tue, 3 Jan 2022 20:03:36 +0100
+
 libkotki (0.5.0) unstable; urgency=medium
 
   * Fix Python bindings, set RPATH $ORIGIN for shared Python library, else libkotki.so wont be located

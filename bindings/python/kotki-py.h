@@ -27,8 +27,8 @@ void _init();
 PYBIND11_MODULE(kotki, m) {
   m.doc() = "Python binding for the kotki language translator";
 
-  m.def("loadRegistry", pybind11::overload_cast<>(&load), "Recursively search for 'registry.json' in '~/.config/kotki/models/', auto-detect translation models");
-  m.def("loadRegistry", pybind11::overload_cast<const std::string &>(&load), "Load registry.json from a supplied path");
+  m.def("load", pybind11::overload_cast<>(&load), "Recursively search for 'registry.json' in '~/.config/kotki/models/', auto-detect translation models");
+  m.def("load", pybind11::overload_cast<const std::string &>(&load), "Load registry.json from a supplied path");
   m.def("translate", &translate, "translate some text");
   m.def("listModels", &listModels, "list loaded translation models");
 }
