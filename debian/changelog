@@ -1,3 +1,9 @@
+libkotki (0.5.0) unstable; urgency=medium
+
+  * Fix Python bindings, set RPATH $ORIGIN for shared Python library, else libkotki.so wont be located
+
+ -- Sander <code@kroket.io>  Tue, 3 Jan 2022 19:03:36 +0100
+
 libkotki (0.4.9) unstable; urgency=medium
 
   * Auto-detect translation models under ~/.config/kotki/models/ if load() is called without argument.
