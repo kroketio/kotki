@@ -99,7 +99,10 @@ map<string, map<string, string>> Kotki::listModels() {
 
 // Recursively search for 'registry.json' in '~/.config/kotki/models/', auto-detect translation models
 // @TODO: try to find the most recent `registry.json`
-void Kotki::load() {
+void Kotki::scan() {
+  if(kotkiCfgModelDir.empty())
+    throw std::runtime_error("kotkiCfgModelDir was empty");
+
   std::map<filesystem::path, Document*> results;
   std::vector<filesystem::path> paths = findFiles(kotkiCfgModelDir, "registry.json");
 
@@ -128,12 +131,14 @@ void Kotki::load() {
   // @TODO: we just pick the first occurrence for now
   for (auto const& [_path, jsonDoc] : results) {
     auto cwd = _path.parent_path().string();
-    load(jsonDoc, cwd);
+    scan(jsonDoc, cwd);
     break;
   }
 }
 
-void Kotki::load(const fs::path& path) {
+void Kotki::scan(const fs::path& path) {
+  if(kotkiCfgModelDir.empty())
+    throw std::runtime_error("kotkiCfgModelDir was empty");
   if(!std::filesystem::exists(path))
     throw std::runtime_error("could not read " + path.string());
   if(fs::is_directory(path))
@@ -148,13 +153,14 @@ void Kotki::load(const fs::path& path) {
   } catch(const std::exception&) {
     throw std::runtime_error("error parsing JSON: " + path.string());
   }
-  return load(cfg, cwd);
+  return scan(cfg, cwd);
 }
 
-void Kotki::load(Document *config_json, const fs::path &cwd) {
+void Kotki::scan(Document *config_json, const fs::path &cwd) {
+  if(kotkiCfgModelDir.empty())
+    throw std::runtime_error("kotkiCfgModelDir was empty");
   if(!fs::is_directory(cwd))
     throw std::runtime_error("cwd must be a directory: " + cwd.string());
-
   if(config_json == nullptr)
     throw std::runtime_error("config may not be empty.");
 

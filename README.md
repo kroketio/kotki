@@ -24,10 +24,12 @@ sudo apt install -y cmake ccache build-essential git pkg-config rapidjson-dev py
 1. `pip install kotki -v`
 2. [Install language translation models](https://github.com/kroketio/kotki/releases)
 
+#### Programmatically
+
 ```python3
 import kotki
-kotki.load()  # auto-find language translation models
-# kotki.load("/path/to/registry.json")  # or supply the path
+kotki.scan()  # auto-find language translation models
+# kotki.scan("/path/to/registry.json")  # or supply the path
 
 # English -> German
 kotki.translate("Whenever I am at the office, I like to drink coffee.", "ende")
@@ -46,6 +48,44 @@ kotki.translate("Румънците получиха дълго чакани н�
 'Jadę na zewnątrz, żeby kupić Pierogi.'
 ```
 
+#### CLI
+
+```text
+$ kotki-cli --help
+Usage: kotki-cli [OPTIONS]
+
+  Translate some text.
+
+Options:
+  -i, --input TEXT         Text to translate  [required]
+  -m, --model TEXT         Model names. Use -l to list. Leave empty to guess
+                           the input language automatically.
+  -r, --registry FILENAME  Path to registry.json. Leave empty for auto-
+                           detection of translation models.
+  -l, --list               List available models.
+  -d, --debug              Print debug log.
+  --help                   Show this message and exit.
+```
+
+#### Self-hosted web-interface
+
+Example: [kotki.kroket.io](https://kotki.kroket.io)
+
+```text
+$ kotki-web --help
+Usage: kotki-web [OPTIONS]
+
+  Exposes kotki via HTTP web interface and provide an API.
+
+Options:
+  -h, --host TEXT          bind host (default: 127.0.0.1)  [required]
+  -p, --port INTEGER       bind port (default: 7000)  [required]
+  -d, --debug              run Quart web-framework in debug
+  -r, --registry FILENAME  Path to registry.json. Leave empty for auto-
+                           detection of translation models.
+  --help                   Show this message and exit.
+```
+
 ### C++
 
 Link against `kotki-lib` (CMake target, see `src/demo/` for reference).
@@ -57,20 +97,17 @@ Link against `kotki-lib` (CMake target, see `src/demo/` for reference).
 using namespace std;
 int main(int argc, char *argv[]) {
   auto *kotki = new Kotki();
-  kotki->load();
+  kotki->scan();
   // auto loadedModels = kotki->listModels();  // show currently loaded language models
   cout << kotki->translate("This should work, in theory.", "ende");  // English to German
   return 0;
 }
 ```
 
-### On the web
-
-- [kotki.kroket.io](https://kotki.kroket.io)
-
 ## why
 
-Kotki is aimed at developers who "just want to translate some text" in their C++ or Python applications without too much headache, as other translation frameworks are often big, difficult to compile, non-performant, etc.
+Kotki is aimed at developers who "just want to translate some text" in their C++ or Python applications without 
+too much headache, as other translation frameworks are often big, difficult to compile, non-performant, etc.
 
 ## Producing libkotki
 
@@ -110,7 +147,9 @@ target_link_libraries(my_app PRIVATE kotki::kotki-lib)
 ## Models
 
 The translation models are borrowed from the
-Mozilla [Firefox Translations](https://addons.mozilla.org/en-US/firefox/addon/firefox-translations/) extension. **You need to manually download these models.** They are conveniently packaged into a single archive that can be downloaded over at [kotki/releases](https://github.com/kroketio/kotki/releases).
+Mozilla [Firefox Translations](https://addons.mozilla.org/en-US/firefox/addon/firefox-translations/) extension. **You need 
+to manually download these models.** They are conveniently packaged into a single archive that can be 
+downloaded over at [kotki/releases](https://github.com/kroketio/kotki/releases).
 
 Extract to `~/.config/kotki/models/` for automatic detection:
 
@@ -120,13 +159,13 @@ wget https://github.com/kroketio/kotki/releases/download/v0.4.5/kotki_models_0.3
 unzip kotki_models_0.3.3.zip -d ~/.config/kotki/models
 ```
 
-Or supply your own path `load("/path/to/registry.json")`.
+Or supply your own path `scan("/path/to/registry.json")`.
 
 ## Performance / footprint
 
 Translations are **fast** - Translating a simple sentence is generally **under** `10ms`
 (except the first time, due to model loading). Translation models are loaded on-demand.
-This means that model loading does not happen during `load()` but during the first use
+This means that model loading does not happen during `scan()` but during the first use
 of `translate()` - which typically takes (only) `100ms` (per model). So if you have
 a project that uses both `translate('foo', 'enfr')` and `translate('foo', 'fren')` - you'll be using 2 models (and consequently `~50MB` worth of RAM during the duration of your program).
 

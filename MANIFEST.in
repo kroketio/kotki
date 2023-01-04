@@ -1,6 +1,6 @@
 include kotki.png README.md LICENSE CMakeLists.txt kotki.pc.in Config.cmake.in
 recursive-include 3rd_party *
-recursive-include bindings *
+recursive-include python *
 recursive-include src *
 recursive-include app *
 recursive-include cmake *

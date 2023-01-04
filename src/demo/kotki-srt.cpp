@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     throw std::runtime_error("could not read " + subPath);
 
   auto *kotki = new Kotki();
-  kotki->load(regPath);
+  kotki->scan(regPath);
 
   string line;
   ifstream srt;

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>kotki-web</title>
+
+  <link rel="shortcut icon" href="/static/favicon.ico">
+  <meta name="description" content="">
+  <link rel="stylesheet" href="/static/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+</head>
+
+<body>
+<header class="center">
+  <h1 style="margin-bottom: 10px;">Kotki</h1>
+  <center>
+    Language translations via a (<a href="https://github.com/kroketio/kotki">self-hosted</a>) Python back-end.
+  </center>
+  <br>
+</header>
+
+<div class="wrap languages">
+  <div class="language">
+    <select name="model" id="model" aria-label="Source language" onchange="fetchResult(); generatecurl();">
+      <option value="auto">Autodetect</option>
+      {% for name in model_names %}
+        <option value="{{name}}">{{name | name2lang}}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="item-wrapper">
+    <textarea autofocus class="item" id="input" name="input" dir="auto" placeholder="Enter Text Here"></textarea>
+  </div>
+  <div class="item-wrapper">
+    <textarea id="output" class="translation item" dir="auto" placeholder="Translation" readonly></textarea>
+  </div>
+</div>
+<div class="wrap" style="font-size: 0.75em;">
+  <p id="responseTiming">
+  response: - | model: -
+  </p>
+</div>
+
+<div id="definitions_and_translations"></div>
+<center>
+  <h3>cURL</h3>
+  <div class="wrap">
+    <textarea style="max-width:600px;" class="item" id="curl" name="curl" dir="auto" readonly></textarea>
+  </div>
+  <p style="font-size: 0.75em;">
+    Note: max {{API_CONTENT_LIMIT}} characters.
+  </p>
+</center>
+<br>
+
+<footer class="center">
+  <a href="https://github.com/kroketio/kotki">source: kotki</a>
+</footer>
+
+<script>
+  // not the best javascript but hey, at least it is not jquery or a single-page-framework
+  var input = document.getElementById("input");
+  var output = document.getElementById("output");
+  var curl = document.getElementById("curl");
+  var response = document.getElementById("responseTiming");
+  var model = document.getElementById("model");
+
+  function debounce(func, timeout = 50){
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+  }
+
+  function gatherResults() {
+    let inputVal = input.value;
+    let langVal = model.value;
+    if(langVal === "auto")
+        langVal = null;
+    inputVal = inputVal.trim();
+    return {'inputVal': inputVal, 'langVal': langVal};
+  }
+
+  function fetchResult() {
+    let data = gatherResults();
+    let inputVal = data.inputVal;
+    let langVal = data.langVal;
+    if(inputVal === "" || inputVal === null) {
+        output.value = '';
+        return;
+    }
+
+    const now = performance.now();
+
+    fetch('/api/1/translate', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({translate: inputVal, model: langVal})
+    })
+    .then(res => {
+        if(res.status === 429) {
+          output.value = 'Rate limited.'
+        } else if(res.status === 500) {
+            console.log(res);
+            output.value = 'Unknown error, check console.';
+            res.json().then(blob => {
+              if(blob.hasOwnProperty('error')) {
+                output.value = blob.error;
+              }
+            });
+        } else if(res.status === 200) {
+          res.json().then(blob => {
+              output.value = blob.translate;
+              response.innerHTML = `response: ${performance.now() - now}ms | model: ${blob.model}`;
+          });
+        } else {
+            output.value = 'Unknown error, check console.';
+            throw res;
+        }
+    })
+  }
+
+  function generatecurl() {
+    let data = gatherResults();
+    let inputVal = escapeShell(data.inputVal);
+    let langVal = data.langVal;
+    let _model = "";
+
+    if(langVal !== null)
+        _model = `, "model": "${langVal}"`;
+
+    let cmdline = `
+  curl '{{API_ROUTE_TRANSLATE}}' \\
+    -X POST \\
+    -H 'Content-Type: application/json' \\
+    -d '{"translate":"${inputVal}"${_model}}'`;
+    cmdline = cmdline.trim();
+    curl.value = cmdline;
+  }
+
+  const textChange = debounce(() => fetchResult());
+
+  // Auto resize textarea to fit words inside it without need to scroll -- Thanks to: https://stackoverflow.com/a/25621277
+  input.setAttribute("style", "height:" + output.scrollHeight + "px;overflow-y:scroll;");
+  output.setAttribute("style", "height:" + output.scrollHeight + "px;overflow-y:scroll;");
+  input.addEventListener("input", function (e) {
+      this.style.height = 150 + "px";
+      this.style.height = this.scrollHeight + "px";
+  });
+
+  document.getElementById("input").addEventListener("keydown", function (event) {
+      if(event.ctrlKey || event.altKey || event.shiftKey || event.metaKey) return;
+      generatecurl();
+      textChange();
+  });
+
+  document.getElementById("input").addEventListener('paste', (event) => {
+      setTimeout(() => {
+        generatecurl();
+        fetchResult();
+      }, 50);
+  });
+
+  let escapeShell = function(cmd) {
+    return cmd.replace(/(["'$`\\])/g,'\\$1');
+  };
+</script>
+</body>
+</html>

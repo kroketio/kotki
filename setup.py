@@ -172,10 +172,34 @@ setup(
     zip_safe=False,
     extras_require={"test": ["pytest>=6.0"]},
     license_files=("LICENSE",),
+    entry_points={
+        'console_scripts': [
+            'kotki-cli=kotki_cli:kotki_cli_handler',
+            'kotki-web=kotki_web.run:kotki_web_handler',
+        ],
+    },
     python_requires=">=3.6",
-    packages=["kotki"],
-    package_dir={"kotki": "bindings/python"},
-    install_requires=["requests", "pyyaml>=5.1", "appdirs"],
+    package_data={
+        'kotki_web': ['**/*'],
+        'kotki_cli': ['**/*']
+    },
+    packages=[
+        "kotki",
+        "kotki_cli",
+        "kotki_web",
+    ],
+    package_dir={
+        "": "python"
+    },
+    install_requires=[
+        "langdetect",
+        "quart",
+        "quart_schema",
+        "requests",
+        "pyyaml",
+        "appdirs",
+        "click"
+    ],
     # Classifiers help users find your project by categorizing it.
     #
     # For a list of valid classifiers, see https://pypi.org/classifiers/
@@ -184,7 +208,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         # Indicate who your project is intended for
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Build Tools",

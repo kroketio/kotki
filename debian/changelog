@@ -1,3 +1,13 @@
+libkotki (0.6.0) unstable; urgency=medium
+
+  * Rename function load() to scan()
+  * Fix scan() to not segfault
+  * Add `lang.cpp/lang.h` - country code -> country name
+  * Add 2 new Python modules: kotki_cli, kotki_web
+  * Update README
+
+ -- Sander <code@kroket.io>  Tue, 4 Jan 2022 22:03:36 +0100
+
 libkotki (0.5.1) unstable; urgency=medium
 
   * Fix Python bindings, change function signature loadRegistry() to load(), as per .cpp

@@ -12,6 +12,7 @@
 
 #include "kotki/nb_prefix.h"
 #include "kotki/translation_model.h"
+#include "kotki/lang.h"
 
 #include "rapidjson/document.h"
 #include "rapidjson/schema.h"
@@ -51,6 +52,13 @@ struct KotkiTranslationModel {
     rtn["model"] = this->pathModel_;
     rtn["lex"] = this->pathLex_;
     rtn["vocab"] = this->pathVocab_;
+    rtn["description"] = "";
+    if(lang::countryCodes.count(langFrom) &&
+       lang::countryCodes.count(langTo)) {
+      rtn["description"] = lang::countryCodes[langFrom] +
+                           " -> " +
+                           lang::countryCodes[langTo];
+    }
     return rtn;
   }
  private:
@@ -66,9 +74,9 @@ class Kotki {
  public:
   Kotki();
 
-  void load();
-  void load(const fs::path& path);
-  void load(Document *config_json, const fs::path &path);
+  void scan();
+  void scan(const fs::path& path);
+  void scan(Document *config_json, const fs::path &path);
 
   string translate(string input, string language);
   map<string, map<string, string>> listModels();

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 project(kotki
-        VERSION 0.5.1
+        VERSION 0.6.0
         DESCRIPTION "Library for language translation without using the cloud."
         HOMEPAGE_URL https://github.com/kroketio/kotki
         LANGUAGES CXX C)
@@ -36,5 +36,5 @@ endif()
 add_subdirectory(src)
 
 if(COMPILE_PYTHON)
-    add_subdirectory(bindings/python)
+    add_subdirectory(python/kotki)
 endif(COMPILE_PYTHON)

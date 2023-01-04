@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 
   string pathRegistry = argv[1];
   auto *kotki = new Kotki();
-  kotki->load(pathRegistry);
+  kotki->scan(pathRegistry);
 
   cout << kotki->translate(argv[3], argv[2]);
 

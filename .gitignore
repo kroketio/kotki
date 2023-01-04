@@ -24,3 +24,9 @@ venv
 
 # VSCode
 .vscode
+
+*.egg-info
+debian/debhelper-build-stamp
+debian/files
+debian/libkotki*
+debian/.debhelper
