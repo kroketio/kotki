@@ -180,8 +180,8 @@ setup(
     },
     python_requires=">=3.6",
     package_data={
-        'kotki_web': ['**/*'],
-        'kotki_cli': ['**/*']
+        'kotki_web': ['*','*/*','*/*/*','*/*/*/*'],
+        'kotki_cli': ['*','*/*','*/*/*','*/*/*/*']
     },
     packages=[
         "kotki",

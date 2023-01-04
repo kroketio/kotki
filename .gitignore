@@ -30,3 +30,4 @@ debian/debhelper-build-stamp
 debian/files
 debian/libkotki*
 debian/.debhelper
+__pycache__

@@ -1,3 +1,10 @@
+libkotki (0.6.1) unstable; urgency=medium
+
+  * Fix kotki_web: include templates 
+  * Remove __pycache__ from codebase
+
+ -- Sander <code@kroket.io>  Tue, 4 Jan 2022 23:23:36 +0100
+
 libkotki (0.6.0) unstable; urgency=medium
 
   * Rename function load() to scan()
