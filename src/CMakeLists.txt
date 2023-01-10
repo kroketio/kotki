@@ -31,6 +31,8 @@ endif()
 
 target_link_libraries(kotki-lib PUBLIC
         yaml-cpp
+        ruy::ruy
+        ruy::ruy_platform
         )
 
 target_include_directories(kotki-lib PUBLIC

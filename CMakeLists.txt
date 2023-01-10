@@ -16,6 +16,17 @@ option(BUILD_DEMO "Build example demo application(s)" OFF)
 option(COMPILE_PYTHON "Compile Python bindings" OFF)
 option(VENDORED_LIBS "Download dependencies during CMake configure time. Not recommended, off by default. Used during 'pip install kotki -v'" OFF)
 
+if(${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "arm*")
+    # using ARM
+    #find_package(ARM)
+    #add_compile_options("${ARM_COMPILE_OPTIONS}")
+    #add_compile_options(-mfpu=crypto-neon-fp-armv8)
+    include(cmake/armFlags.cmake)
+
+    add_compile_definitions(ARM FMA SSE) #added for ARM
+    add_compile_definitions(USE_RUY_SGEMM=1 RUY_PLATFORM_NEON=1)
+endif()
+
 if(STATIC)
     message(STATUS "${PROJECT_NAME} - STATIC BUILD ON")
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")

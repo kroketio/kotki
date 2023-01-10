@@ -58,7 +58,14 @@ void TranslationModel::loadBackend(size_t idx) {
   graph->setDefaultElementType(typeFromString(prec[0]));
   graph->setDevice(device_);
   graph->getBackend()->configureDevice(options_);
-  graph->reserveWorkspaceMB(options_->get<size_t>("workspace"));
+
+#ifdef __arm__
+  graph->reserveWorkspaceMB(64);
+#elif __x86_64__
+  graph->reserveWorkspaceMB(128);
+#else
+  throw std::runtime_error("unknown arch");
+#endif
 
   // Marian Model: Load from memoryBundle or shortList
   if (memory_.model.size() > 0 &&
