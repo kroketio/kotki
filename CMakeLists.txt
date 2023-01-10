@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 project(kotki
-        VERSION 0.6.1
+        VERSION 0.6.2
         DESCRIPTION "Library for language translation without using the cloud."
         HOMEPAGE_URL https://github.com/kroketio/kotki
         LANGUAGES CXX C)
@@ -15,6 +15,13 @@ option(SHARED "Produce shared binary" ON)
 option(BUILD_DEMO "Build example demo application(s)" OFF)
 option(COMPILE_PYTHON "Compile Python bindings" OFF)
 option(VENDORED_LIBS "Download dependencies during CMake configure time. Not recommended, off by default. Used during 'pip install kotki -v'" OFF)
+
+if(${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "arm*")
+    include(cmake/armFlags.cmake)
+
+    add_compile_definitions(ARM FMA SSE)
+    add_compile_definitions(USE_RUY_SGEMM=1 RUY_PLATFORM_NEON=1)
+endif()
 
 if(STATIC)
     message(STATUS "${PROJECT_NAME} - STATIC BUILD ON")

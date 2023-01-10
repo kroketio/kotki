@@ -29,9 +29,11 @@ else()
 endif()
 
 
-target_link_libraries(kotki-lib PUBLIC
-        yaml-cpp
-        )
+target_link_libraries(kotki-lib PUBLIC yaml-cpp)
+
+if(ARM_FOUND)
+    target_link_libraries(kotki-lib PUBLIC ruy::ruy ruy::ruy_platform)
+endif()
 
 target_include_directories(kotki-lib PUBLIC
         ${RAPIDJSON_INCLUDE_DIRS}

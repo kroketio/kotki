@@ -22,26 +22,26 @@ bool startswith(const string& haystack, const string& needle);
 bool endswith(std::string const & value, std::string const &ending);
 void nukeChar(string &val, const char _char);
 int main(int argc, char *argv[]) {
-  if(argc != 4) {
+  if(argc != 3) {
     cout << "Usage: \n"
-            "\t./kotki-srt <path_to_registry.json> <lang> <srt_file>\n"
-            "\t./kotki-srt '/home/user/example/models/registry.json' 'ennl' 'test.srt'\n\n"
+            "\t./kotki-srt <lang> <srt_file>\n"
+            "\t./kotki-srt 'enbg' 'test.srt'\n\n"
             "Download models here: https://github.com/kroketio/kotki/releases\n";
     return 1;
   }
 
-  const string regPath = argv[1];
-  const string modelName = argv[2];
-  const string subPath = argv[3];
+  // const string regPath = argv[1];
+  const string modelName = argv[1];
+  const string subPath = argv[2];
 
-  if(!std::filesystem::exists(regPath))
-    throw std::runtime_error("could not read " + regPath);
+//  if(!std::filesystem::exists(regPath))
+//    throw std::runtime_error("could not read " + regPath);
 
   if(!std::filesystem::exists(subPath))
     throw std::runtime_error("could not read " + subPath);
 
   auto *kotki = new Kotki();
-  kotki->scan(regPath);
+  kotki->scan();
 
   string line;
   ifstream srt;
