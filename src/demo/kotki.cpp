@@ -10,19 +10,19 @@ using namespace std;
 
 
 int main(int argc, char *argv[]) {
-  if(argc != 4) {
+  if(argc != 3) {
     cout << "Usage: \n"
-            "\t./kotki-cli <path_to_registry.json> <lang> <input>\n"
-            "\t./kotki-cli '/home/user/example/models/registry.json' 'ennl' 'My input text.'\n\n"
+            "\t./kotki-cli <lang> <input>\n"
+            "\t./kotki-cli 'enbg' 'My input text.'\n\n"
             "Download models here: https://github.com/kroketio/kotki/releases\n";
     return 1;
   }
 
-  string pathRegistry = argv[1];
+  //string pathRegistry = argv[1];
   auto *kotki = new Kotki();
-  kotki->scan(pathRegistry);
+  kotki->scan();
 
-  cout << kotki->translate(argv[3], argv[2]);
+  cout << kotki->translate(argv[2], argv[1]);
 
   return 0;
 }

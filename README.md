@@ -2,11 +2,16 @@
 
 [![License: MPL v2](https://img.shields.io/badge/License-MPL%20v2-blue.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
 
-Fast language translations without using the cloud using Neural Machine techniques. Written in C++. Based on [Bergamot](https://browser.mt/).
+High-performance language translations without using the cloud.
 
-Uses language models borrowed from the Mozilla extension ['Firefox Translations'](https://addons.mozilla.org/en-US/firefox/addon/firefox-translations/).
-
-100% FOSS, **Linux only**
+- C/C++ 17 implementation
+- x86_64, ARM
+- Runs on the CPU
+- AVX intrinsics support for x86 architectures
+- NEON intrinsics support for ARM architectures
+- Language models from the Mozilla extension [Firefox Translations](https://addons.mozilla.org/en-US/firefox/addon/firefox-translations/)
+- FOSS (OpenBLAS)
+- Linux only
 
 ## Quick start
 
@@ -164,12 +169,9 @@ Or supply your own path `scan("/path/to/registry.json")`.
 ## Performance / footprint
 
 Translations are **fast** - Translating a simple sentence is generally **under** `10ms`
-(except the first time, due to model loading). Translation models are loaded on-demand.
+(except the first time, due to model loading). Note that translation models are loaded on-demand.
 This means that model loading does not happen during `scan()` but during the first use
-of `translate()` - which typically takes (only) `100ms` (per model). So if you have
-a project that uses both `translate('foo', 'enfr')` and `translate('foo', 'fren')` - you'll be using 2 models (and consequently `~50MB` worth of RAM during the duration of your program).
-
-Note that translations are done synchronously (and thus are 'blocking').
+of `translate()`. In addition, translations are done synchronously (and thus 'blocking').
 
 ## Acknowledgements
 
