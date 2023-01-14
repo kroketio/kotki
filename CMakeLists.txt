@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 project(kotki
-        VERSION 0.6.2
+        VERSION 0.6.3
         DESCRIPTION "Library for language translation without using the cloud."
         HOMEPAGE_URL https://github.com/kroketio/kotki
         LANGUAGES CXX C)
@@ -28,9 +28,13 @@ if(STATIC)
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
     set(BUILD_SHARED_LIBS OFF)
     set(CMAKE_EXE_LINKER_FLAGS "-static")
+    set(YAMLCPP_USE_STATIC_LIBS ON)
+    set(ZLIB_USE_STATIC_LIBS ON)
 endif()
 
 include(FindCcache)
+find_package(YamlCpp REQUIRED)
+find_package(ZLIB REQUIRED)
 find_package(PkgConfig REQUIRED)
 find_package(rapidjson REQUIRED)
 

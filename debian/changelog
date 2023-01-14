@@ -1,3 +1,11 @@
+libkotki (0.6.3) unstable; urgency=medium
+
+  * Bump marian submodule to 0.1.8
+  * Support both SHARED and STATIC compiles - not working yet :P
+  * Dockerfile that produces static libkotki.a (libc 2.31) - not working yet :P
+
+ -- Sander <code@kroket.io>  Tue, 13 Jan 2022 23:23:36 +0100
+
 libkotki (0.6.1) unstable; urgency=medium
 
   * Fix kotki_web: include templates 
