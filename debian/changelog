@@ -1,3 +1,12 @@
+libkotki (0.6.4) unstable; urgency=medium
+
+  * Bump marian submodule to 0.1.9
+  * Simple benchmark application (via -DBUILD_DEMO=ON)
+  * Change some ARM compilation flags
+  * ccache support via FindCcache.cmake
+
+ -- Sander <code@kroket.io>  Tue, 15 Jan 2022 09:33:36 +0100
+
 libkotki (0.6.3) unstable; urgency=medium
 
   * Bump marian submodule to 0.1.8

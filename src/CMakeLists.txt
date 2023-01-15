@@ -118,15 +118,22 @@ install(FILES
 # some demo apps
 if(BUILD_DEMO)
     add_executable(kotki-cli demo/kotki.cpp)
-    target_link_libraries(kotki-cli PRIVATE kotki-lib-STATIC)
+    target_link_libraries(kotki-cli PRIVATE kotki-lib-SHARED)
     target_include_directories(kotki-cli PRIVATE
             ${CMAKE_CURRENT_LIST_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}
             )
 
     add_executable(kotki-srt demo/kotki-srt.cpp)
-    target_link_libraries(kotki-srt PRIVATE kotki-lib-STATIC)
+    target_link_libraries(kotki-srt PRIVATE kotki-lib-SHARED)
     target_include_directories(kotki-srt PRIVATE
+            ${CMAKE_CURRENT_LIST_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            )
+
+    add_executable(kotki-bench demo/kotki-bench.cpp)
+    target_link_libraries(kotki-bench PRIVATE kotki-lib-SHARED)
+    target_include_directories(kotki-bench PRIVATE
             ${CMAKE_CURRENT_LIST_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}
             )

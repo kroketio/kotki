@@ -12,8 +12,8 @@ import sys
 lookup = {
     0xc05: {"cpu": "cortex-a5", 'arch': "armv7-a", 'fpu': 'neon-fp16'},
     0xc07: {"cpu": "cortex-a7", 'arch': "armv7ve", 'fpu': 'neon-vfpv4'},
-    0xC08: {"cpu": "cortex-a8", 'arch': "armv7-a", 'fpu': 'neon'},
-    0xC09: {"cpu": "cortex-a9", 'arch': "armv7-a", 'fpu': 'neon-fp16'},
+    0xC08: {"cpu": "cortex-a8", 'arch': "armv7-a+neon", 'fpu': 'neon'},
+    0xC09: {"cpu": "cortex-a9", 'arch': "armv7-a+neon", 'fpu': 'neon-fp16'},
     0xc0f: {"cpu": "cortex-a15", 'arch': "armv7ve", 'fpu': 'neon-vfpv4'},
     0xc0e: {"cpu": "cortex-a17", 'arch': "armv7-a", 'fpu': 'neon'},
     0xd03: {"cpu": "cortex-a53", 'arch': "armv8-a+crc", 'fpu': 'crypto-neon-fp-armv8'},
