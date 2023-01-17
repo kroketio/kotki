@@ -12,7 +12,7 @@ map<string, string> countryCodes = {
     {"fr", "French"},
     {"nl", "Dutch"},
     {"es", "Spanish"},
-    {"cs", "Serbian"},
+    {"cs", "Czech"},
     {"af", "Afghanistan"},
     {"ax", "Åland Islands"},
     {"al", "Albania"},

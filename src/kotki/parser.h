@@ -4,7 +4,6 @@
 #include <fstream>
 #include <sstream>
 
-#include "marian-lite/3rd_party/CLI/CLI.hpp"
 #include <yaml-cpp/yaml.h>
 #include "marian-lite/common/build_info.h"
 #include "marian-lite/common/config_parser.h"

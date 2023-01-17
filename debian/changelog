@@ -1,3 +1,8 @@
+libkotki (0.6.5) unstable; urgency=medium
+
+  * Bump marian submodule to 0.2.0
+  * cs is Czech
+
 libkotki (0.6.4) unstable; urgency=medium
 
   * Bump marian submodule to 0.1.9
