@@ -1,12 +1,23 @@
+libkotki (0.6.7) unstable; urgency=medium
+
+  * Only pass -mfpu=NEON on 32bit ARM 
+  * Bump marian submodule to 0.2.4
+
+ -- Sander <code@kroket.io>  Tue, 20 Jan 2022 16:33:36 +0100
+
 libkotki (0.6.6) unstable; urgency=medium
 
   * Bump marian submodule to 0.2.3
   * Remove ARM flag detection, assume -mfpu=neon
 
+ -- Sander <code@kroket.io>  Tue, 15 Jan 2022 16:23:36 +0100
+
 libkotki (0.6.5) unstable; urgency=medium
 
   * Bump marian submodule to 0.2.0
   * cs is Czech
+
+ -- Sander <code@kroket.io>  Tue, 15 Jan 2022 10:33:36 +0100
 
 libkotki (0.6.4) unstable; urgency=medium
 

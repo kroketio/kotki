@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 project(kotki
-        VERSION 0.6.6
+        VERSION 0.6.7
         DESCRIPTION "Library for language translation without using the cloud."
         HOMEPAGE_URL https://github.com/kroketio/kotki
         LANGUAGES CXX C)
@@ -17,7 +17,18 @@ option(COMPILE_PYTHON "Compile Python bindings" OFF)
 option(VENDORED_LIBS "Download dependencies during CMake configure time. Not recommended, off by default. Used during 'pip install kotki -v'" OFF)
 
 if(${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "arm*")
-    add_compile_options("-mfpu=neon")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm.*|ARM.*)")  # 32bit
+        add_compile_options("-mfpu=neon")  # we'll assume it
+        message(STATUS "ARM 32bit, adding -mfpu=neon")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*)")  # NEON is implied on aarch64
+        if(NOT "${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+            message(FATAL_ERROR "invalid pointer size")
+        endif()
+        message(STATUS "AARCH64")
+    else()
+        message(FATAL_ERROR "Unknown ARM processor '${CMAKE_SYSTEM_PROCESSOR}'")
+    endif()
+
     set(NEON_FOUND true CACHE BOOL "NEON available on host")  # we'll assume it
     set(ARM_FOUND true CACHE BOOL "arm")
     add_compile_definitions(ARM FMA SSE)

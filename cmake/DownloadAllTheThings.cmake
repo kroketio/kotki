@@ -7,7 +7,7 @@ message(STATUS "Vendoring libs for kotki-lib")
 
 FetchContent_Declare(marian-lite
     GIT_REPOSITORY https://github.com/kroketio/marian-lite.git
-    GIT_TAG "0.2.3"
+    GIT_TAG "0.2.4"
     GIT_SHALLOW    TRUE
     GIT_PROGRESS   TRUE
 )
