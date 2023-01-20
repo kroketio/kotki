@@ -1,3 +1,8 @@
+libkotki (0.6.6) unstable; urgency=medium
+
+  * Bump marian submodule to 0.2.3
+  * Remove ARM flag detection, assume -mfpu=neon
+
 libkotki (0.6.5) unstable; urgency=medium
 
   * Bump marian submodule to 0.2.0
