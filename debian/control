@@ -14,6 +14,7 @@ Build-Depends: debhelper (>= 10),
     pybind11-dev,
     python3-dev,
     libpcre2-dev,
+    libcli11-dev,
     libsqlite3-dev
 Homepage: https://github.com/kroketio/kotki
 XSBC-Bugtracker: https://github.com/kroketio/kotki/issues

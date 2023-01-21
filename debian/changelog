@@ -1,6 +1,12 @@
+libkotki (0.7.2) unstable; urgency=medium
+
+  * debian/control: libcli11-dev
+
+ -- Sander <code@kroket.io>  Tue, 21 Jan 2022 19:34:36 +0100
+
 libkotki (0.7.1) unstable; urgency=medium
 
-  * debian/control pybind11-dev, python3-dev, libpcre2-dev, libsqlite3-dev missing
+  * debian/control: pybind11-dev, python3-dev, libpcre2-dev, libsqlite3-dev missing
 
  -- Sander <code@kroket.io>  Tue, 21 Jan 2022 19:34:36 +0100
 
