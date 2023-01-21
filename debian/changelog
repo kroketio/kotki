@@ -1,3 +1,9 @@
+libkotki (0.6.8) unstable; urgency=medium
+
+  * Bump marian submodule to 0.2.6
+
+ -- Sander <code@kroket.io>  Tue, 21 Jan 2022 16:33:36 +0100
+
 libkotki (0.6.7) unstable; urgency=medium
 
   * Only pass -mfpu=NEON on 32bit ARM 
