@@ -1,3 +1,10 @@
+libkotki (0.7.0) unstable; urgency=medium
+
+  * Set compiler preprocessor definition 'armhf' when on arm 32bit
+  * Bump marian submodule to 0.2.8
+
+ -- Sander <code@kroket.io>  Tue, 21 Jan 2022 19:34:36 +0100
+
 libkotki (0.6.9) unstable; urgency=medium
 
   * Bump marian submodule to 0.2.7

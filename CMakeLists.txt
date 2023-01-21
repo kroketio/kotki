@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 project(kotki
-        VERSION 0.6.9
+        VERSION 0.7.0
         DESCRIPTION "Library for language translation without using the cloud."
         HOMEPAGE_URL https://github.com/kroketio/kotki
         LANGUAGES CXX C)
@@ -19,6 +19,7 @@ option(VENDORED_LIBS "Download dependencies during CMake configure time. Not rec
 if(${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "arm*")
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm.*|ARM.*)")  # 32bit
         add_compile_options("-mfpu=neon")  # we'll assume it
+        add_compile_definitions(armhf)
         message(STATUS "ARM 32bit, adding -mfpu=neon")
     elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*)")  # NEON is implied on aarch64
         if(NOT "${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
