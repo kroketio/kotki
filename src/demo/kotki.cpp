@@ -1,6 +1,6 @@
 // Sample C++ example that links against kotki-lib (see ../CMakeLists.txt)
 // to build (from root project dir):
-//    cmake -Bbuild
+//    cmake -Bbuild -DBUILD_DEMO=1
 //    make -Cbuild -j6
 // the executable will be located at build/app/kotki-cli
 #include <string>

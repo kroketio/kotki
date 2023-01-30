@@ -74,9 +74,12 @@ class Kotki {
  public:
   Kotki();
 
-  void scan();
-  void scan(const fs::path& path);
-  void scan(Document *config_json, const fs::path &path);
+  int scan();
+  int scan(const fs::path& path);
+  int scan(vector<filesystem::path> paths);
+  int clear();
+
+  vector<KotkiTranslationModel*> loadRegistry(const fs::path &regPath);
 
   string translate(string input, string language);
   map<string, map<string, string>> listModels();

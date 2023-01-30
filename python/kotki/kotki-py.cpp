@@ -1,13 +1,13 @@
 #include "kotki-py.h"
 
-void scan() {
+int scan() {
   if(kotki_ == nullptr) _init();
-  kotki_->scan();
+  return kotki_->scan();
 }
 
-void scan(const string& pathToJsonConfig) {
+int scan(const string& pathToJsonConfig) {
   if(kotki_ == nullptr) _init();
-  kotki_->scan(pathToJsonConfig);
+  return kotki_->scan(pathToJsonConfig);
 }
 
 string translate(const string& input, const string& language) {

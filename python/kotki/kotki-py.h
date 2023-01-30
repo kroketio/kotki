@@ -18,8 +18,8 @@ using namespace std;
 
 static Kotki *kotki_ = nullptr;
 
-void scan();
-void scan(const string& pathToJsonConfig);
+int scan();
+int scan(const string& pathToJsonConfig);
 string translate(const string& input, const string& language);
 map<string, map<string, string>> listModels();
 void _init();
@@ -27,8 +27,8 @@ void _init();
 PYBIND11_MODULE(kotki, m) {
   m.doc() = "Python binding for the kotki language translator";
 
-  m.def("scan", pybind11::overload_cast<>(&scan), "Recursively search for 'registry.json' in '~/.config/kotki/models/', auto-detect translation models");
-  m.def("scan", pybind11::overload_cast<const std::string &>(&scan), "Load registry.json from a supplied path", pybind11::arg("path"));
+  m.def("scan", pybind11::overload_cast<>(&scan), "Recursively search for 'registry.json' in various places. Returns amount of models loaded.");
+  m.def("scan", pybind11::overload_cast<const std::string &>(&scan), "Load registry.json from a supplied path. Returns amount of models loaded.", pybind11::arg("path"));
   m.def("translate", &translate, "translate some text", pybind11::arg("text"), pybind11::arg("model"));
   m.def("listModels", &listModels, "list loaded translation models");
 }

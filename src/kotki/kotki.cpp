@@ -81,7 +81,6 @@ std::string Kotki::translate(string input, string language) {
   }
 
   auto result = m_models[language]->translate(input);
-
   // bug fix when result starts with '- '
   if((result.rfind("- ", 0) == 0)) {
     result = result.erase(0, 2);
@@ -97,76 +96,75 @@ map<string, map<string, string>> Kotki::listModels() {
   return data;
 }
 
-// Recursively search for 'registry.json' in '~/.config/kotki/models/', auto-detect translation models
-// @TODO: try to find the most recent `registry.json`
-void Kotki::scan() {
-  if(kotkiCfgModelDir.empty())
+// Recursively search for 'registry.json'
+// - ~/.config/kotki/models/
+// - /usr/share/kotki/
+int Kotki::scan() {
+  string kotkiUsrDir = "/usr/share/kotki/";
+  vector<filesystem::path> paths;
+  vector<filesystem::path> cfgPaths;
+  vector<filesystem::path> usrPaths;
+
+  if(std::filesystem::exists(kotkiUsrDir))
+    usrPaths = findFiles(kotkiUsrDir, "registry.json");
+  if(std::filesystem::exists(kotkiCfgModelDir))
+    cfgPaths = findFiles(kotkiCfgModelDir, "registry.json");
+
+  // for now, just grab the first occurrence of registry.json in the config dir
+  // @TODO: latest version detection
+  if(!cfgPaths.empty()) {
+    cfgPaths = {cfgPaths[0]};
+  }
+
+  paths.insert(paths.end(), usrPaths.begin(), usrPaths.end());
+  paths.insert(paths.end(), cfgPaths.begin(), cfgPaths.end());
+
+  if(paths.empty()) {
+    string msg = "Could not auto-find models. Search directories:\n";
+    msg += "- " + kotkiCfgModelDir.string() + "\n";
+    msg += "- /usr/share/kotki/\n";
+    msg += "More info: https://github.com/kroketio/kotki/releases/";
+    throw std::runtime_error(msg);
+  }
+  return this->scan(paths);
+}
+
+int Kotki::scan(const fs::path& path) {
+  if(!endsWith(path.string(), ".json"))
     throw std::runtime_error("kotkiCfgModelDir was empty");
 
-  std::map<filesystem::path, Document*> results;
-  std::vector<filesystem::path> paths = findFiles(kotkiCfgModelDir, "registry.json");
+  vector<filesystem::path> paths = {path};
+  return this->scan(paths);
+}
 
-  for(const auto& path : paths) {
-    try {
-      auto doc = jsonLoads(readFile(path).str());
-      results[path] = doc;
-    } catch(const std::exception&) {
-      std::cerr << "skipping path " + path.string();
+int Kotki::scan(vector<filesystem::path> paths) {
+  if(paths.empty())
+    throw std::runtime_error("scan(paths) was empty");
+
+  int loaded = 0;
+  for(const auto &path: paths) {
+    vector<KotkiTranslationModel*> _models = this->loadRegistry(path);
+    for(const auto &_model: _models) {
+      if(m_models.count(_model->name)) {
+        delete m_models[_model->name];
+      }
+
+      m_models[_model->name] = _model;
+      loaded += 1;
     }
   }
 
-  if(results.empty()) {
-    throw std::runtime_error("Could not auto-find models in '" + kotkiCfgModelDir.string() +
-                             "'. Read github.com/kroketio/kotki/releases/ for instructions.");
-  }
-
-  // @TODO: implement latest version detection
-//  for (auto const& [key, val] : results) {
-//    auto rootObj = m_doc.GetObject();
-//    if(rootObj.HasMember("version")){
-//
-//    }
-//  }
-
-  // @TODO: we just pick the first occurrence for now
-  for (auto const& [_path, jsonDoc] : results) {
-    auto cwd = _path.parent_path().string();
-    scan(jsonDoc, cwd);
-    break;
-  }
+  return loaded;
 }
 
-void Kotki::scan(const fs::path& path) {
-  if(kotkiCfgModelDir.empty())
-    throw std::runtime_error("kotkiCfgModelDir was empty");
-  if(!std::filesystem::exists(path))
-    throw std::runtime_error("could not read " + path.string());
-  if(fs::is_directory(path))
-    throw std::runtime_error("path is not a file: " + path.string());
+vector<KotkiTranslationModel*> Kotki::loadRegistry(const fs::path &regPath) {
+  vector<KotkiTranslationModel*> results;
+  string cwd = regPath.parent_path().string() + "/";
+  auto buf = readFile(regPath);
+  auto doc = jsonLoads(buf.str());
+  const auto rootObj = doc->GetObject();
 
-  string cwd = path.parent_path().string() + "/";
-  Document *cfg;
-
-  try {
-    auto buf = readFile(path);
-    cfg = jsonLoads(buf.str());
-  } catch(const std::exception&) {
-    throw std::runtime_error("error parsing JSON: " + path.string());
-  }
-  return scan(cfg, cwd);
-}
-
-void Kotki::scan(Document *config_json, const fs::path &cwd) {
-  if(kotkiCfgModelDir.empty())
-    throw std::runtime_error("kotkiCfgModelDir was empty");
-  if(!fs::is_directory(cwd))
-    throw std::runtime_error("cwd must be a directory: " + cwd.string());
-  if(config_json == nullptr)
-    throw std::runtime_error("config may not be empty.");
-
-  const auto cwdStr = cwd.string() + "/";
-  const auto rootObj = config_json->GetObject();
-  for (auto const& group : rootObj){
+  for (auto const& group : rootObj) {
     const auto *name = group.name.GetString();
     if(strlen(name) != 4) { continue; }
     const auto obj = group.value.GetObject();
@@ -188,9 +186,9 @@ void Kotki::scan(Document *config_json, const fs::path &cwd) {
     const auto lexObj = obj["lex"].GetObject();
     const auto vocabObj = obj["vocab"].GetObject();
 
-    auto modelPath = cwdStr + modelObj["name"].GetString();
-    auto lexPath = cwdStr + lexObj["name"].GetString();
-    auto vocabPath = cwdStr + vocabObj["name"].GetString();
+    auto modelPath = cwd + modelObj["name"].GetString();
+    auto lexPath = cwd + lexObj["name"].GetString();
+    auto vocabPath = cwd + vocabObj["name"].GetString();
 
     string pathErr;
     for(const auto &path: {modelPath, lexPath, vocabPath}) {
@@ -205,16 +203,11 @@ void Kotki::scan(Document *config_json, const fs::path &cwd) {
       continue;
     }
 
-    auto *kmodel = new KotkiTranslationModel(name, cwd, modelPath, lexPath, vocabPath, this);
-
-    if(m_models.count(name)) {
-      delete m_models[name];
-    }
-
-    m_models[name] = kmodel;
+    auto *model = new KotkiTranslationModel(name, cwd, modelPath, lexPath, vocabPath, this);
+    results.emplace_back(model);
   }
 
-  delete config_json;
+  return results;
 }
 
 void Kotki::ensureConfigDirectory() {
