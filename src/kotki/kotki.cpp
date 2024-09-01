@@ -77,7 +77,11 @@ Kotki::Kotki() {
 std::string Kotki::translate(string input, string language) {
   if(!m_models.count(language)) {
     std::cerr << "language << " << language << " not found\n";
-    return "";
+    if(language.length()<4)return "";
+    string firstlang = language.substr(0,2);
+    string secondlang = language.substr(2,2);
+    if(firstlang=="en"||secondlang=="en")return "";
+    return translate(translate(input,firstlang+"en"),"en"+secondlang);
   }
 
   auto result = m_models[language]->translate(input);
