@@ -25,12 +25,13 @@ namespace fs = std::filesystem;
 class Kotki;
 struct KotkiTranslationModel {
   // name should be 4 chars, e.g: 'nlen' (Dutch to English)
-  explicit KotkiTranslationModel(string name, string cwd, string pathModel, string pathLex, string pathVocab, Kotki* kotki)
+  explicit KotkiTranslationModel(string name, string cwd, string pathModel, string pathLex, string pathVocab,string pathTrgVocab, Kotki* kotki)
       : name(name),
         cwd(cwd),
         pathModel_(std::move(pathModel)),
         pathLex_(std::move(pathLex)),
         pathVocab_(std::move(pathVocab)),
+        pathTrgVocab_(std::move(pathTrgVocab)),
         kotki_(kotki) {
     langFrom = name.substr(0, 2);
     langTo = name.erase(0, 2);
@@ -51,7 +52,11 @@ struct KotkiTranslationModel {
     rtn["version"] = "";  // @TODO: support versions
     rtn["model"] = this->pathModel_;
     rtn["lex"] = this->pathLex_;
-    rtn["vocab"] = this->pathVocab_;
+    if(this->pathVocab_==this->pathTrgVocab_)rtn["vocab"] = this->pathVocab_;
+    else {
+        rtn["srcvocab"] = this->pathVocab_;
+        rtn["trgvocab"] = this->pathTrgVocab_;
+    }
     rtn["description"] = "";
     if(lang::countryCodes.count(langFrom) &&
        lang::countryCodes.count(langTo)) {
@@ -65,6 +70,7 @@ struct KotkiTranslationModel {
   string pathModel_;
   string pathLex_;
   string pathVocab_;
+  string pathTrgVocab_;
   Kotki* kotki_;
   string findNBPrefixFile();
   std::optional<TranslationCache> m_cache = std::nullopt;
@@ -79,6 +85,7 @@ class Kotki {
   int scan(vector<filesystem::path> paths);
   int clear();
 
+  bool modelExists(string name);
   vector<KotkiTranslationModel*> loadRegistry(const fs::path &regPath);
 
   string translate(string input, string language);
