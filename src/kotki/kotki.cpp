@@ -46,7 +46,7 @@ void KotkiTranslationModel::load() {
   config->set("models", models);
   config->set("gemm-precision", endsWith(models[0], "intgemm8.bin") ? "int8shiftAll" : "int8shiftAlphaAll");
 
-  auto vocabs = std::vector<std::string>({pathVocab_, pathVocab_});
+  auto vocabs = std::vector<std::string>({pathVocab_, pathTrgVocab_});
   config->set("vocabs", vocabs);
 
   auto shortlist = std::vector<std::string>({pathLex_,
@@ -174,7 +174,8 @@ vector<KotkiTranslationModel*> Kotki::loadRegistry(const fs::path &regPath) {
     const auto obj = group.value.GetObject();
 
     string requiredErr;
-    for(auto const& required: {"model", "lex", "vocab"}) {
+    bool diffVocabs = (obj.HasMember("srcvocab")&&obj.HasMember("trgvocab"));
+    for(auto const& required: {"model", "lex", !diffVocabs?"vocab":"srcvocab"}) {
       if(!obj.HasMember(required)) {
         requiredErr = required;
         break;
@@ -188,11 +189,15 @@ vector<KotkiTranslationModel*> Kotki::loadRegistry(const fs::path &regPath) {
 
     const auto modelObj = obj["model"].GetObject();
     const auto lexObj = obj["lex"].GetObject();
-    const auto vocabObj = obj["vocab"].GetObject();
+    const auto vocabObj = (!diffVocabs) ? obj["vocab"].GetObject() : obj["srcvocab"].GetObject();
+    const auto trgVocabObj = (!diffVocabs) ? vocabObj : obj["trgvocab"].GetObject();
+
 
     auto modelPath = cwd + modelObj["name"].GetString();
     auto lexPath = cwd + lexObj["name"].GetString();
     auto vocabPath = cwd + vocabObj["name"].GetString();
+    auto trgVocabPath = cwd + trgVocabObj["name"].GetString();
+
 
     string pathErr;
     for(const auto &path: {modelPath, lexPath, vocabPath}) {
@@ -201,13 +206,18 @@ vector<KotkiTranslationModel*> Kotki::loadRegistry(const fs::path &regPath) {
         break;
       }
     }
+    if(diffVocabs)
+    {
+        if(!fs::exists(trgVocabPath))pathErr = trgVocabPath;
+    }
+
 
     if(!pathErr.empty()) {
       std::cerr << "Skipping model " << name << " because path " << pathErr << " does not exist\n";
       continue;
     }
 
-    auto *model = new KotkiTranslationModel(name, cwd, modelPath, lexPath, vocabPath, this);
+    auto *model = new KotkiTranslationModel(name, cwd, modelPath, lexPath, vocabPath, trgVocabPath, this);
     results.emplace_back(model);
   }
 
